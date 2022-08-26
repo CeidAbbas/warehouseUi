@@ -5,6 +5,7 @@
       <div class="text-end col-sm-5 lh-lg">
         <app-header-tools
           (reloadEmitter)="reload()"
+          [showPlus]="false"
           (editModeEmitter)="editMode=$event"
         ></app-header-tools>
       </div>
@@ -33,13 +34,13 @@
         </tr>
         </tbody>
       </table>
+<!--      <div class="" *ngIf="editMode">-->
+<!--&lt;!&ndash;          [warehouseId]="editLoadId"&ndash;&gt;-->
+<!--        <app-warehouse-inventory-edit-->
+<!--          (editModeEmitter)="editModeBack($event)"-->
+<!--        ></app-warehouse-inventory-edit>-->
+<!--      </div>-->
     </article>
   </div>
 </div>
-<!--<mat-slider min="1" max="100" step="1" value="50"></mat-slider>-->
-<!--<mat-tree>-->
-<!--  <mat-tree-node> parent node </mat-tree-node>-->
-<!--  <mat-tree-node> &#45;&#45; child node1 </mat-tree-node>-->
-<!--  <mat-tree-node> &#45;&#45; child node2 </mat-tree-node>-->
-<!--</mat-tree>-->
 
