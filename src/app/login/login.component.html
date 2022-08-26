@@ -1,0 +1,15 @@
+<div class="col-sm-3 align-center m-auto">
+  <h3 class="text-center">ورود</h3>
+  <input type="text" class="form-control text-end m-3" [(ngModel)]="user">
+  <input type="password" class="form-control text-end m-3" [(ngModel)]="password">
+  <div class="col-sm-12 col-12 row m-3">
+    <div class="col-sm-6 col-6">
+      <input type="checkbox">
+    </div>
+    <span class="col-sm-6 col-6 text-end p-0">فراموشی رمز</span>
+  </div>
+  <button type="button" class="btn btn-primary m-3" (click)="login()">
+    <span class="font-weight-6">ورود </span>
+    <i class="bi bi-box-arrow-in-left"></i>
+  </button>
+</div>

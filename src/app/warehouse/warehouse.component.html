@@ -1,0 +1,132 @@
+<div class="m-3 p-2">
+  <div class="card">
+    <header class="bg-light row m-0">
+      <h2 class="col-sm-7 lh-4" *ngIf="!editMode; else editModeTitle">{{ title }} {{ warehouseTitle }}</h2>
+      <ng-template #editModeTitle>
+        <h2 class="col-sm-7 lh-4">
+          تعریف انبار جدید
+        </h2>
+      </ng-template>
+      <div class="text-end col-sm-5 lh-lg">
+        <span>
+        <app-header-tools
+          (editModeEmitter)="editModeBack($event)"
+          (reloadEmitter)="reload()"
+          [editMode]="editMode"
+        ></app-header-tools>
+        </span>
+      </div>
+    </header>
+    <article class="">
+      <table class="table table-bordered table-striped table-hover"
+             *ngIf="!editMode">
+        <thead>
+        <tr class>
+          <th>نام انبار</th>
+          <th>ظرفیت</th>
+          <!--          <th>مکان</th>-->
+          <th>وضعيت</th>
+          <th>عملیات</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="" *ngFor="let warehouse of warehouses"
+            (dblclick)="switchToEditMode(warehouse.id)">
+          <td> {{ warehouse.name }}</td>
+          <td> {{ warehouse.capacity }}</td>
+          <!--          <td> {{ warehouse.location }}</td>-->
+          <td *ngIf="warehouse.status; else deactive"> فعال</td>
+          <ng-template #deactive>
+            <td> غیر فعال</td>
+          </ng-template>
+          <td>
+            <div>
+              <!--              <i class="fa fa-trash text-danger" (click)="deleteWarehouse(warehouse)"></i>&nbsp;-->
+              <i class="fa fa-arrow-up text-info" (click)="importWare(warehouse.id)"></i>&nbsp;
+              <i class="fa fa-arrow-down text-danger" (click)="exportWare(warehouse.id)"></i>&nbsp;
+              <i class="fa fa-warehouse text-danger" (click)="switchToInventory(warehouse.id)"></i>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div *ngIf="importDiv || exportDiv || showInventory"
+           style="position: absolute; top: 150px; left: 5px; z-index: 1;"
+           class="bg-whit e w-100">
+        <div style="height: 400px; width: 70%;" class="row m-0 p-0 bg-da rk m-auto w-70">
+          <div class="col-12 col-sm-12 row bg-light m-0 p-0 text-end" style="height: 10%">
+            <span class="col-11 col-sm-11 text-start">{{ modalHeader }}</span>
+            <i class="col-1 col-sm-1 fa fa-times mt-2" (click)="closeModal()"></i>
+          </div>
+          <div
+            class="p-0"
+            *ngIf="importDiv"
+            style="height: 90%"
+          >
+            <app-warehouse-inventory-edit
+              class="p-0"
+              [wares]="wares"
+              [warehouseId]="warehouseId"
+              (switchToGrid)="backFromWarehouseInventory($event)"
+            >
+            </app-warehouse-inventory-edit>
+          </div>
+          <div
+            class="p-0"
+            *ngIf="exportDiv"
+            style="height: 90%; position: relative; top: 0;"
+          >
+<!--            <span class="text-primary"></span>-->
+            <span>خروج کالا از انبار </span>
+            <div class="row col-12 col-sm-12 m-0 p-0 bg-white">
+              <div class="row col-12 col-sm-12 m-0 p-0">
+                <div class="col-6 col-sm-6 m-0 p-0">
+                  <label class="label-control">كالای خروجی</label>
+                  <select class="form-control">
+                    <option value="{{ warehouseInventory.id }}"
+                            *ngFor="let warehouseInventory of warehouseInventories">{{ warehouseInventory.wareName }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-6 col-sm-6 m-0 p-0">
+                  <label class="label-control">انبار مقصد</label>
+                  <select class="form-control">
+                    <option value="{{ warehouse.id }}"
+                            *ngFor="let warehouse of warehousesFiltered">{{ warehouse.name }}
+                    </option>
+                  </select>
+                </div>
+                <div class="col-6 col-sm-6 m-0 p-0"></div>
+              </div>
+              <div class="row col-12 col-sm-12 m-0 p-0">
+                <div class="col-6 col-sm-6 m-0 p-0"></div>
+                <div class="col-6 col-sm-6 m-0 p-0"></div>
+              </div>
+              <div class="row col-12 col-sm-12 m-0 p-0">
+                <div class="col-6 col-sm-6 m-0 p-0"></div>
+                <div class="col-6 col-sm-6 m-0 p-0"></div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="p-0"
+            *ngIf="showInventory"
+            style="height: 90%; position: relative; top: 0;"
+          >
+            <app-warehouse-inventory
+              class="p-0"
+              [warehouseId]="warehouseId"
+            >
+            </app-warehouse-inventory>
+          </div>
+        </div>
+      </div>
+      <div class="" *ngIf="editMode">
+        <app-warehouse-edit
+          [warehouseId]="editLoadId"
+          (editModeEmitter)="editModeBack($event)"
+        ></app-warehouse-edit>
+      </div>
+    </article>
+  </div>
+</div>
