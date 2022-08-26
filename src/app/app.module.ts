@@ -26,6 +26,7 @@ import {WarehouseInventoryEditComponent} from './warehouse-inventory/warehouse-i
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { ModalComponent } from './general/utility/modal/modal.component';
 import {OperationBottomComponent} from './general/utility/operation-bottom/operation-bottom.component';
+import { TreeComponent } from './general/utility/tree/tree.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import {OperationBottomComponent} from './general/utility/operation-bottom/opera
     WarehouseInventoryEditComponent,
     OperationBottomComponent,
     ModalComponent,
+    TreeComponent,
   ],
   imports: [
     BrowserModule,

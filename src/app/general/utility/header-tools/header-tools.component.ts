@@ -8,7 +8,7 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 export class HeaderToolsComponent implements OnInit {
 
   @Input() editMode: boolean = false;
-  @Input() showPlus: boolean = this.editMode;
+  @Input() showPlus: boolean = !this.editMode;
   @Output() editModeEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   @Output() reloadEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 

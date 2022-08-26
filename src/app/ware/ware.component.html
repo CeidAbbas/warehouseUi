@@ -4,7 +4,7 @@
       <h2 class="col-sm-7 lh-4" *ngIf="!editMode; else editModeTitle">{{ title }} {{ wareTitle }}</h2>
       <ng-template #editModeTitle>
         <h2 class="col-sm-7 lh-4">
-          تعریف انبار جدید
+          تعریف کالای جدید
         </h2>
       </ng-template>
       <div class="text-end col-sm-5 lh-lg">
@@ -41,7 +41,7 @@
             <td> غیر فعال</td>
           </ng-template>
           <td>
-            <i class="fa fa-trash text-danger" (click)="deleteWare(ware)"></i>&nbsp;
+<!--            <i class="fa fa-trash text-danger" (click)="deleteWare(ware)"></i>&nbsp;-->
             <!--            <i class="fa fa-arrow-up text-info" (click)="importWare(warehouse)"></i>&nbsp;-->
             <!--            <i class="fa fa-arrow-down text-danger" (click)="exportWare(warehouse)"></i>-->
           </td>
