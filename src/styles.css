@@ -2,3 +2,17 @@
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.modals-header {
+  background-color: #043700;
+  color: #fff;
+  border-radius: 10px 10px 0 0;
+}
+
+table {
+  text-align: center;
+}
+
+.w-90 {
+  width: 90%;
+}
