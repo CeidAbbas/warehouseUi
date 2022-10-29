@@ -24,13 +24,14 @@ export class BaseInformationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.onLoad();
+    // this.onLoad();
   }
 
   onLoad() {
-    this.BaseInformationService.getAllBaseInformation().subscribe(baseInformations => {
-      this.baseInformations = baseInformations;
-    })
+    // this.BaseInformationService.getAllBaseInformation().subscribe(baseInformations => {
+    //   this.baseInformations = baseInformations;
+    // });
+    // console.log(this.baseInformations);
   }
 
   reload(): void {
