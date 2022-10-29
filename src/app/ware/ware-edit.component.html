@@ -1,24 +1,30 @@
 <div class="row m-0 p-0 col-12 col-sm-12">
   <div class="row m-0 mt-3 p-0 col-6 col-sm-6">
-    <label for="" class="col-12 col-sm-12 control-label text-danger">کالا</label>
+    <label for="" class="col-12 col-sm-12 control-label text-danger">نام کالا</label>
     <input class="col-12 col-sm-12 form-control" [(ngModel)]="ware.name">
   </div>
   <div class="row m-0 mt-3 p-0 col-6 col-sm-6">
-    <label for="" class="col-12 col-sm-12 control-label text-danger">نوع کالا</label>
-    <select class="col-12 col-sm-12 form-control" [(ngModel)]="ware.typeId">
-      <option value="-1" [selected]="true">لطفا نوع کالا انتخاب نمایید</option>
-      <option class="" *ngFor="let baseInformation of baseInformations"
-              value="{{baseInformation.id}}">{{ baseInformation.wareType }}</option>
-    </select>
+    <label for="" class="col-12 col-sm-12 control-label text-danger">گروه کالا</label>
+        <p-tree
+          [value]="treeNode"
+          selectionMode="single"
+          [(selection)]="selectedFile"
+        ></p-tree>
+<!--    <select class="col-12 col-sm-12 form-control" [(ngModel)]="ware.typeId">-->
+<!--      <option value="-1" [selected]="true">گروه کالا انتخاب نمایید</option>-->
+<!--      <option class="" *ngFor="let wareType of wareTypes"-->
+<!--              value="{{wareType.id}}">{{ wareType.label }}</option>-->
+<!--    </select>-->
+    <!--      [contextMenu]="rightMenu"-->
   </div>
 </div>
 <div class="row m-0 p-0 col-12 col-sm-12">
   <div class="row m-0 mt-3 p-0 col-6 col-sm-6">
     <label for="" class="col-12 col-sm-12 control-label text-danger">واحد کالا</label>
     <select class="form-control" [(ngModel)]="ware.unitId">
-      <option>واحد کالا را انتخاب نمایید</option>
-      <option class="" *ngFor="let baseInformation of baseInformations"
-              value="{{baseInformation.id}}">{{ baseInformation.wareUnit }}</option>
+      <option selected value="0">واحد کالا را انتخاب نمایید</option>
+      <option class="" *ngFor="let wareUnit of wareUnits"
+              value="{{wareUnit.id}}">{{ wareUnit.label }}</option>
     </select>
   </div>
   <div class="row m-0 mt-3 p-0 col-6 col-sm-6">

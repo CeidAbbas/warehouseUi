@@ -36,4 +36,7 @@ export class WareService extends BaseService {
   getAllBaseInformation(): Observable<BaseInformation[]> {
     return this.httpClient.get<BaseInformation[]>(`${this.baseUrl}rest/baseInformation/getAll`);
   }
+  // getBaseInformationById(baseInformationId: string): Observable<BaseInformation[]> {
+  //   return this.httpClient.get<BaseInformation[]>(`${this.baseUrl}rest/baseInformation/getBaseInformationById`);
+  // }
 }

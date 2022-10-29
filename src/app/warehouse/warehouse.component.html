@@ -42,9 +42,9 @@
           <td>
             <div>
               <!--              <i class="fa fa-trash text-danger" (click)="deleteWarehouse(warehouse)"></i>&nbsp;-->
-              <i class="fa fa-arrow-up text-info" (click)="importWare(warehouse.id)"></i>&nbsp;
-              <i class="fa fa-arrow-down text-danger" (click)="exportWare(warehouse.id)"></i>&nbsp;
-              <i class="fa fa-warehouse text-dark" (click)="switchToInventory(warehouse.id)"></i>
+              <i class="fa fa-arrow-up text-success" (click)="importWare(warehouse)"></i>&nbsp;
+              <i class="fa fa-arrow-down text-danger" (click)="exportWare(warehouse)"></i>&nbsp;
+              <i class="fa fa-warehouse text-dark" (click)="switchToInventory(warehouse)"></i>
             </div>
           </td>
         </tr>
@@ -53,18 +53,17 @@
       <div *ngIf="importDiv || exportDiv || showInventory"
            style="position: absolute; top: 150px; left: 5px; z-index: 1;"
            class="bg-whit e w-100">
-        <div style="height: 400px; width: 70%;" class="row m-0 p-0 bg-da rk m-auto w-70">
-          <div class="col-12 col-sm-12 row bg-light m-0 p-0 text-end" style="height: 10%">
-            <span class="col-11 col-sm-11 text-start">{{ modalHeader }}</span>
-            <i class="col-1 col-sm-1 fa fa-times mt-2" (click)="closeModal()"></i>
+        <div style="height: 400px;" class="row m-0 p-0 bg-da rk m-auto w-90">
+          <div class="col-12 col-sm-12 d-flex justify-content-around modals-header" style="height: 10%; ">
+            <span class="col-12 col-sm-12">{{ modalHeader }}</span>
+            <i class="co l -1 col-sm -1 fa fa-times mt-2" style="width:1%" (click)="closeModal()"></i>
           </div>
           <div
-            class="p-0"
+            class=""
             *ngIf="importDiv"
             style="height: 90%"
           >
             <app-warehouse-inventory-edit
-              class="p-0"
               [wares]="wares"
               [warehouseId]="warehouseId"
               (switchToGrid)="backFromWarehouseInventory($event)"
@@ -76,46 +75,54 @@
             *ngIf="exportDiv"
             style="height: 90%; position: relative; top: 0;"
           >
-<!--            <span class="text-primary"></span>-->
-            <span>خروج کالا از انبار </span>
-            <div class="row col-12 col-sm-12 m-0 p-0 bg-white">
-              <div class="row col-12 col-sm-12 m-0 p-0">
-                <div class="col-6 col-sm-6 m-0 p-0">
-                  <label class="label-control">كالای خروجی</label>
-                  <select class="form-control">
-                    <option value="{{ warehouseInventory.id }}"
-                            *ngFor="let warehouseInventory of warehouseInventories">{{ warehouseInventory.wareName }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-6 col-sm-6 m-0 p-0">
-                  <label class="label-control">انبار مقصد</label>
-                  <select class="form-control">
-                    <option value="{{ warehouse.id }}"
-                            *ngFor="let warehouse of warehousesFiltered">{{ warehouse.name }}
-                    </option>
-                  </select>
-                </div>
-                <div class="col-6 col-sm-6 m-0 p-0"></div>
-              </div>
-              <div class="row col-12 col-sm-12 m-0 p-0">
-                <div class="col-6 col-sm-6 m-0 p-0"></div>
-                <div class="col-6 col-sm-6 m-0 p-0"></div>
-              </div>
-              <div class="row col-12 col-sm-12 m-0 p-0">
-                <div class="col-6 col-sm-6 m-0 p-0"></div>
-                <div class="col-6 col-sm-6 m-0 p-0"></div>
-              </div>
-            </div>
+            <app-warehouse-inventory
+              [warehouseId]="warehouseId"
+              [warehouseTitle]="warehouseTitles"
+              [originLocation]="'export'"
+            >
+            </app-warehouse-inventory>
           </div>
+          <!--            <span class="text-primary"></span>
+                      <span>خروج کالا از انبار </span>
+                      <div class="row col-12 col-sm-12 m-0 p-0 bg-white">
+                        <div class="row col-12 col-sm-12 m-0 p-0">
+                          <div class="col-6 col-sm-6 m-0 p-0">
+                            <label class="label-control">كالای خروجی</label>
+                            <select class="form-control">
+                              <option value="{{ warehouseInventory.id }}"
+                                      *ngFor="let warehouseInventory of warehouseInventories">{{ warehouseInventory.wareName }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="col-6 col-sm-6 m-0 p-0">
+                            <label class="label-control">انبار مقصد</label>
+                            <select class="form-control">
+                              <option value="{{ warehouse.id }}"
+                                      *ngFor="let warehouse of warehousesFiltered">{{ warehouse.name }}
+                              </option>
+                            </select>
+                          </div>
+                          <div class="col-6 col-sm-6 m-0 p-0"></div>
+                        </div>
+                        <div class="row col-12 col-sm-12 m-0 p-0">
+                          <div class="col-6 col-sm-6 m-0 p-0"></div>
+                          <div class="col-6 col-sm-6 m-0 p-0"></div>
+                        </div>
+                        <div class="row col-12 col-sm-12 m-0 p-0">
+                          <div class="col-6 col-sm-6 m-0 p-0"></div>
+                          <div class="col-6 col-sm-6 m-0 p-0"></div>
+                        </div>
+                      </div>
+                    </div>-->
           <div
             class="p-0"
             *ngIf="showInventory"
             style="height: 90%; position: relative; top: 0;"
           >
             <app-warehouse-inventory
-              class="p-0"
               [warehouseId]="warehouseId"
+              [warehouseTitle]="warehouseTitles"
+              [originLocation]="'showInventory'"
             >
             </app-warehouse-inventory>
           </div>

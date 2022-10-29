@@ -1,0 +1,16 @@
+dp-date-picker .dp-picker-input .ng-pristine .ng-valid .ng-touched {
+  color: red;
+}
+
+borderInput {
+  border: none !important;
+  background-color: darkgray;
+}
+
+textarea {
+  resize: none;
+}
+
+input[type="color"] {
+  height: 2.72rem;
+}

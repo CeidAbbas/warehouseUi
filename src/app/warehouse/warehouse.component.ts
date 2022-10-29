@@ -5,6 +5,7 @@ import {WareService} from '../ware/ware.service';
 import {Ware} from '../ware/ware';
 import {WarehouseInventory} from '../warehouse-inventory/warehouse-inventory';
 import {WarehouseInventoryService} from '../warehouse-inventory/warehouse-inventory.service';
+import {Person} from "../person/person";
 
 @Component({
   selector: 'app-warehouse',
@@ -20,12 +21,13 @@ export class WarehouseComponent implements OnInit {
   public wares?: Ware[];
   public title = 'انبار';
   public warehouseTitle = 'بهار';
+  public warehouseTitles = '';
   @Input() sourceLoad = true;
   public editModeTitle = 'ویرایش انبار';
   public editMode = false;
   public editLoadId = '';
   public importDiv = false;
-  public exportDiv = false;
+  public exportDiv = true;
   public showInventory = false;
   public warehouseId = '';
   public modalHeader = '';
@@ -69,8 +71,8 @@ export class WarehouseComponent implements OnInit {
     this.editMode = true;
   }
 
-  importWare(warehouseId: string): void {
-    this.warehouseId = warehouseId;
+  importWare(warehouse: Warehouse): void {
+    this.warehouseId = warehouse.id;
     this.wareService.getAllWare().subscribe(wares => {
       this.wares = wares;
     });
@@ -80,24 +82,26 @@ export class WarehouseComponent implements OnInit {
     this.modalHeader = 'ثبت کالای ورودی';
   }
 
-  exportWare(warehouseId: string): void {
-    this.warehouseId = warehouseId;
+  exportWare(warehouse: Warehouse): void {
+    this.warehouseId = warehouse.id;
+    this.warehouseTitles = 'انبار' + warehouse.name;
     this.importDiv = false;
     this.showInventory = false;
     this.exportDiv = !this.exportDiv;
     if (this.exportDiv) {
-      this.warehouseInventoryService.getByWarehouseId(warehouseId).subscribe(warehouseInventories => {
+      this.warehouseInventoryService.getByWarehouseId(this.warehouseId).subscribe(warehouseInventories => {
         this.warehouseInventories = warehouseInventories;
         this.warehousesFiltered = this.warehouses.filter(warehouse => {
-          return warehouse.id !== warehouseId;
+          return warehouse.id !== this.warehouseId;
         });
       });
       this.modalHeader = 'خروج کالا از انبار';
     }
   }
 
-  switchToInventory(warehouseId: string): void {
-    this.warehouseId = warehouseId;
+  switchToInventory(warehouse: Warehouse): void {
+    this.warehouseId = warehouse.id;
+    this.warehouseTitles = 'انبار' + warehouse.name;
     this.importDiv = false;
     this.exportDiv = false;
     this.showInventory = !this.showInventory;
@@ -107,7 +111,7 @@ export class WarehouseComponent implements OnInit {
   closeModal(): void {
     this.importDiv = false;
     this.exportDiv = false;
-    this.showInventory = this.showInventory = false;
+    this.showInventory = false;
   }
 
   backFromWarehouseInventory($event: any): void {
