@@ -1,10 +1,10 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {BrowserModule} from '@angular/platform-browser';
+import {NgModule} from '@angular/core';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {LoginComponent} from './login/login.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {DashboardComponent} from './dashboard/dashboard.component';
 import {FooterComponent} from './footer/footer.component';
 import {HeaderComponent} from './header/header.component';
@@ -24,9 +24,23 @@ import {BaseInformationComponent} from './general/reference/base-information/bas
 import {BaseInformationEditComponent} from './general/reference/base-information/base-information-edit.component';
 import {WarehouseInventoryEditComponent} from './warehouse-inventory/warehouse-inventory-edit.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import { ModalComponent } from './general/utility/modal/modal.component';
+import {ModalComponent} from './general/utility/modal/modal.component';
 import {OperationBottomComponent} from './general/utility/operation-bottom/operation-bottom.component';
-import { TreeComponent } from './general/utility/tree/tree.component';
+import {TreeComponent} from './general/utility/tree/tree.component';
+import {TreeModule} from "primeng/tree";
+import {ContextMenuModule} from "primeng/contextmenu";
+import {ToastModule} from "primeng/toast";
+import {DecimalPipe} from '@angular/common';
+import {DpDatePickerModule} from "ng2-jalali-date-picker";
+import { PackageComponent } from './package/package.component';
+import { PackageEditComponent } from './package/package-edit.component';
+import {TooltipModule} from "primeng/tooltip";
+import {ConfirmDialogModule} from "primeng/confirmdialog";
+import {ConfirmationService} from "primeng/api";
+import {MessagesModule} from "primeng/messages";
+import { ForwardingComponent } from './forwarding/forwarding.component';
+import { ForwardingEditComponent } from './forwarding/forwarding-edit.component';
+// import {MatDatepickerModulePersian} from '@angular-persian/material-date-picker';
 
 @NgModule({
   declarations: [
@@ -53,15 +67,32 @@ import { TreeComponent } from './general/utility/tree/tree.component';
     OperationBottomComponent,
     ModalComponent,
     TreeComponent,
+    PackageComponent,
+    PackageEditComponent,
+    ForwardingComponent,
+    ForwardingEditComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
+    TreeModule,
     BrowserAnimationsModule,
+    ContextMenuModule,
+    ReactiveFormsModule,
+    // MatDatepickerModulePersian,
+    // NgPersianDatepickerModule,
+    ToastModule,
+    DpDatePickerModule,
+    TooltipModule,
+    ConfirmDialogModule,
+    MessagesModule,
   ],
-  providers: [],
+  providers: [
+    DecimalPipe,
+    ConfirmationService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

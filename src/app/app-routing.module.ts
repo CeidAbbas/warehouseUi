@@ -8,6 +8,7 @@ import {WareComponent} from './ware/ware.component';
 import {WarehouseInventoryComponent} from './warehouse-inventory/warehouse-inventory.component';
 import { WarehouseResponsibleComponent } from './warehouse-responsible/warehouse-responsible.component';
 import {WarehouseComponent} from './warehouse/warehouse.component';
+import { ForwardingComponent } from './forwarding/forwarding.component';
 
 const routes: Routes = [
   {path: '', component: LoginComponent},
@@ -20,6 +21,7 @@ const routes: Routes = [
   {path: 'ware', component: WareComponent},
   {path: 'warehouseResponsible', component: WarehouseResponsibleComponent},
   {path: 'baseInformation', component: BaseInformationComponent},
+  {path: 'forwarding', component: ForwardingComponent},
 ];
 
 @NgModule({
