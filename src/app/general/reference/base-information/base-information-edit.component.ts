@@ -20,6 +20,7 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
   public baseInformationTitle = '';
   public editMode = false;
   public addNode = false;
+  public colorMode = false;
   @Input() public baseInformationId = '';
   @Output() public editModeEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   baseInformationHeader!: string;
@@ -53,19 +54,31 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
     ];
   }
 
-  showAddNode(file: TreeNode, mode: string) {
+  showAddNode(file: any, mode: string) {
+    this.colorMode = false;
+    console.log(file);
+    console.log(mode);
     this.baseInformation = file as BaseInformation;
     let hierarchy: string;
     this.parent = this.baseInformation.id as string;
     if (mode === 'add') {
       this.baseInformation.id = null;
       hierarchy = this.baseInformation.hierarchy + this.transformDecimal(this.baseInformation.children.length + 1);
+      if (file.hierarchy == '009') {
+        this.colorMode = true;
+      } else if (file.hierarchy.search('009') != 0 && file.hierarchy <= '009') {
+        this.baseInformation.hierarchy = hierarchy;
+        this.addNode = true;
+      }
     } else if (mode === 'edit') {
+      if (file.hierarchy.search('009') == 0 && file.hierarchy > '009') {
+        this.colorMode = true;
+      }
       this.label = this.baseInformation.label;
       hierarchy = this.baseInformation.hierarchy;
+      this.baseInformation.hierarchy = hierarchy;
+      this.addNode = true;
     }
-    this.baseInformation.hierarchy = hierarchy;
-    this.addNode = true;
   }
 
   unselectFile() {
@@ -84,8 +97,6 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
     this.baseInformation.label = this.label;
     this.baseInformation.children = null;
     this.baseInformation.parent = null;
-    console.log(this.baseInformation);
-    console.log(this.parent);
     this.baseInformationService.saveBaseInformation(this.baseInformation, this.parent).subscribe(
       data => {
         this.onLoad();
@@ -96,14 +107,12 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
     );
   }
 
-  // tslint:disable-next-line:typedef
   switchToGrid() {
     this.baseInformation = new BaseInformation();
     this.editModeEmitter.emit(false);
   }
 
-  // tslint:disable-next-line:typedef
-  selectBaseInformation() {
+  /*selectBaseInformation() {
     this.editMode = true;
     if (this.baseInformationHeader === 'gender') {
       this.baseInformationTitle = 'جنسيت';
@@ -116,11 +125,10 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
     }
     // this.baseInformationService.getAllBaseInformation().subscribe(baseInformations => {
     //   this.baseInformations = baseInformations;
-    //   // console.log(baseInformations);
     //   this.makeTreeJson(baseInformations);
     //   // this.baseInformations = this.removeNull(baseInformations, this.baseInformationHeader);
     // });
-  }
+  }*/
 
   removeNull(objects: any, type: any) {
     objects.forEach((object: { [x: string]: null; }, index: number) => {

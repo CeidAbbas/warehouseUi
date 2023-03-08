@@ -1,0 +1,112 @@
+<div class="">
+  <div class="card">
+    <header class="bg-light row m-0">
+      <h2 class="col-sm-7 lh-4" *ngIf="!editMode; else editModeTitle">{{ title }} {{ warehouseTitle }}</h2>
+      <ng-template #editModeTitle>
+        <h2 class="col-sm-7 lh-4">
+          تعریف انبار جدید
+        </h2>
+      </ng-template>
+      <div class="text-end col-sm-5 lh-lg">
+        <span>
+        <app-header-tools
+          (editModeEmitter)="editModeBack($event)"
+          (reloadEmitter)="reload()"
+          (searchModeEmitter)="searchModeBack($event)"
+          [editMode]="editMode"
+        ></app-header-tools>
+        </span>
+      </div>
+    </header>
+    <article class="p-3">
+      <table class="table table-bordered table-striped table-hover"
+             *ngIf="!editMode && !searchMode">
+        <thead>
+        <tr class>
+          <th>نام انبار</th>
+          <th>ظرفیت</th>
+          <!--          <th>مکان</th>-->
+          <th>وضعيت</th>
+          <th>عملیات</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="" *ngFor="let warehouse of warehouses"
+            (dblclick)="switchToEditMode(warehouse.id)">
+          <td> {{ warehouse.name }}</td>
+          <td> {{ warehouse.capacity }}</td>
+          <!--          <td> {{ warehouse.location }}</td>-->
+          <td *ngIf="warehouse.status; else deactive"> فعال</td>
+          <ng-template #deactive>
+            <td> غیر فعال</td>
+          </ng-template>
+          <td>
+            <div>
+              <!--              <i class="fa fa-trash text-danger" (click)="deleteWarehouse(warehouse)"></i>&nbsp;-->
+              <i class="fa fa-arrow-up text-success" (click)="importWare(warehouse)"></i>&nbsp;
+              <i class="fa fa-arrow-down text-danger" (click)="exportWare(warehouse)"></i>&nbsp;
+              <i class="fa fa-warehouse text-dark" (click)="switchToInventory(warehouse)"></i>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <div *ngIf="importDiv || exportDiv || showInventory"
+           style="position: absolute; top: 150px; left: 5px; z-index: 1;"
+           class="bg-whit e w-100">
+        <div style="height: 400px;" class="row m-0 p-0 bg-da rk m-auto w-90">
+          <div class="col-12 col-sm-12 d-flex justify-content-around modals-header p-2" style="height: 10%; ">
+            <span class="col-11 col-sm-11">{{ modalHeader }}</span>
+            <div class="col-1 col-sm-1">
+              <i class="offset-9 fa fa-times" style="width:1%" (click)="closeModal()"></i>
+            </div>
+          </div>
+          <div
+            class=""
+            *ngIf="importDiv"
+            style="height: 90%"
+          >
+            <app-warehouse-inventory-edit
+              [wares]="wares"
+              [warehouseId]="warehouseId"
+              (switchToGrid)="backFromWarehouseInventory($event)"
+            ></app-warehouse-inventory-edit>
+          </div>
+          <div
+            class="p-0"
+            *ngIf="exportDiv"
+            style="height: 90%; position: relative; top: 0;"
+          >
+            <app-warehouse-inventory
+              [warehouseId]="warehouseId"
+              [warehouseTitle]="warehouseTitles"
+              [originLocation]="'export'"
+            ></app-warehouse-inventory>
+          </div>
+          <div
+            class="p-0"
+            *ngIf="showInventory"
+            style="height: 90%; position: relative; top: 0;"
+          >
+            <app-warehouse-inventory
+              [warehouseId]="warehouseId"
+              [warehouseTitle]="warehouseTitles"
+              [originLocation]="'showInventory'"
+            ></app-warehouse-inventory>
+          </div>
+        </div>
+      </div>
+      <div class="" *ngIf="editMode">
+        <app-warehouse-edit
+          [warehouseId]="editLoadId"
+          (editModeEmitter)="editModeBack($event)"
+        ></app-warehouse-edit>
+      </div>
+      <div class="" *ngIf="searchMode">
+        <app-warehouse-search
+          (searchModeEmitter)="searchConfig($event)"
+        ></app-warehouse-search>
+      </div>
+    </article>
+  </div>
+</div>

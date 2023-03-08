@@ -1,99 +1,110 @@
 <div class="col-12 col-sm-12">
-<div class="bg-white row">
-  <!--  <div class="row m-0 p-0 col-12 col-sm-12 mb-3 bg-white">-->
-  <div class="col-6 col-sm-6">
-    <label class="control-label">کالا</label>
-    <select class="form-control" [(ngModel)]="warehouseInventory.wareId">
-      <option value="">كالای مد نظر را انتخاب نمایید</option>
-      <option *ngFor="let ware of wares" value="{{ ware.id }}">{{ ware.name }}</option>
-    </select>
-  </div>
-  <div class="col-6 col-sm-6">
-    <label class="control-label">تهیه کننده</label>
-    <select class="form-control" [(ngModel)]="warehouseInventory.producerId">
-      <option value="">تهیه کننده را انتخاب نمایید</option>
-      <option *ngFor="let producer of producers"
-              value="{{ producer.id }}">{{ producer.firstName }} {{ producer.lastName }}</option>
-    </select>
-  </div>
-  <!--  </div>-->
-  <!--  <div class="row m-0 p-0 col-12 col-sm-12 mb-3 bg-white">-->
-  <div class="col-6 col-sm-6">
-    <label class="control-label">مبدأ خرید</label>
-    <select class="form-control" [(ngModel)]="warehouseInventory.buyOriginId">
-      <option value="">مبدأ خرید را انتخاب نمایید</option>
-      <option value=""></option>
-    </select>
-  </div>
-  <!--  </div>-->
-  <!--  <div class="row m-0 p-0 col-12 col-sm-12 bg-white">-->
-  <div class="col-6 col-sm-6 row">
-    <div class="col-6 col-sm-6 col-xs-12">
+  <div class="bg-white row">
+    <!--  <div class="row m-0 p-0 col-12 col-sm-12 mb-3 bg-white">-->
+    <div class="col-6 col-sm-6">
+      <label class="control-label">کالا</label>
+      <select class="form-control" [(ngModel)]="warehouseInventory.wareId">
+        <option value="">كالای مد نظر را انتخاب نمایید</option>
+        <option *ngFor="let ware of wares" value="{{ ware.id }}">{{ ware.name }}</option>
+      </select>
+    </div>
+    <div class="col-6 col-sm-6">
+      <label class="control-label">تهیه کننده</label>
+      <select class="form-control" [(ngModel)]="warehouseInventory.producerId">
+        <option value="">تهیه کننده را انتخاب نمایید</option>
+        <option *ngFor="let producer of producers"
+                value="{{ producer.id }}">{{ producer.firstName }} {{ producer.lastName }}</option>
+      </select>
+    </div>
+    <div class="col-6 col-sm-6">
+      <label class="control-label">سریال</label>
+      <input type="text" class="form-control" [(ngModel)]="warehouseInventory.serial">
+    </div>
+    <div class="col-3 col-sm-3">
+      <label class="control-label">شماره قرارداد</label>
+      <input type="text" class="form-control" [(ngModel)]="warehouseInventory.contractNumber">
+    </div>
+    <div class="col-3 col-sm-3">
+      <label class="control-label">رنگ</label>
+      <select class="form-control" [(ngModel)]="warehouseInventory.color">
+        <option value="#956126" style="background-color: #956126"></option>
+        <option value="#785268" style="background-color: #d85268"></option>
+        <option value="#a2c3f4" style="background-color: #a2c3f4"></option>
+        <option value="#" style="background-color: #956126"></option>
+        <option value="#" style="background-color: #956126"></option>
+        <option value="#" style="background-color: #956126"></option>
+        <option value="#" style="background-color: #956126"></option>
+        <option value="#" style="background-color: #956126"></option>
+        <option value="#" style="background-color: #956126"></option>
+      </select>
+    </div>
+    <div class="col-6 col-sm-6">
+      <label class="control-label">مبدأ خرید</label>
+      <ceid-select
+        [selectClass]="'form-control'"
+        [rest]="'rest/baseInformation/getAll'"
+        [parent]="'edfca745-5eee-4169-939d-5e828f291e3d'"
+        [isBaseInformation]="true"
+        [titleName]="'label'"
+        (sendValue)="warehouseInventory.buyOriginId = $event"
+        [selectValue]="''"
+      ></ceid-select>
+    </div>
+    <div class="col-3 col-sm-3">
       <label class="control-label">تاریخ ورود</label>
       <dp-date-picker
         class=""
         dir="rtl"
-        [(ngModel)]="warehouseInventory.entryDate"
+        [(ngModel)]="entryDate"
         mode="day"
         placeholder=""
-        theme="dp-material">
-      </dp-date-picker>
-<!--        hideInputContainer="hidden"-->
-    </div>
-    <div class="col-6 col-sm-6 col-xs-12">
-      <label class="control-label">تاریخ خروج</label>
-      <dp-date-picker
-        class=""
-        dir="rtl"
-        [(ngModel)]="warehouseInventory.exitDate"
-        mode="day"
-        placeholder=""
+        [config]="{
+        format: 'YYYY/MM/DD'
+        }"
         theme="dp-material">
       </dp-date-picker>
     </div>
-  </div>
-  <!--  <div class="row m-0 p-0 col-12 col-sm-12 mb-3 bg-white">-->
-  <div class="col-6 col-sm-6">
-    <label class="control-label">سریال</label>
-    <input type="text" class="form-control" [(ngModel)]="warehouseInventory.serial">
-  </div>
-  <div class="col-6 col-sm-6">
-    <label class="control-label">شماره قرارداد</label>
-    <input type="text" class="form-control" [(ngModel)]="warehouseInventory.contractNumber">
-  </div>
-  <!--  </div>-->
-  <div class="row m-0 p-0 col-12 col-sm-12 mb-3 bg-white">
-    <div class="col-6 col-sm-6">
+    <!--    <div class="col-3 col-sm-3">-->
+    <!--      <label class="control-label">تاریخ خروج</label>-->
+    <!--      <dp-date-picker-->
+    <!--        class="w-100"-->
+    <!--        dir="rtl"-->
+    <!--        [(ngModel)]="exitDate"-->
+    <!--        mode="day"-->
+    <!--        placeholder=""-->
+    <!--        [config]="{-->
+    <!--        format: 'YYYY/MM/DD'-->
+    <!--        }"-->
+    <!--        theme="dp-material">-->
+    <!--      </dp-date-picker>-->
+    <!--    </div>-->
+    <div class="col-3 col-sm-3">
       <label class="control-label">تاریخ انقضاء</label>
       <dp-date-picker
-        dir="rtl"
-        [(ngModel)]="warehouseInventory.expirationDate"
+        [dir]="'rtl'"
+        [(ngModel)]="expirationDate"
         mode="day"
         placeholder=""
+        [config]="{
+        format: 'YYYY/MM/DD'
+        }"
         theme="dp-material">
       </dp-date-picker>
     </div>
     <!--    <div class="col-6 col-sm-6">-->
-    <!--      <label>رنگ</label>-->
-    <!--      <input type="color" class="form-control" [(ngModel)]="warehouseInventory.color">-->
     <!--    </div>-->
-  </div>
-<!--  <div class="row m-0 p-0 col-12 col-sm-12 mb-3 bg-white">-->
     <div class="col-6 col-sm-6">
       <label class="">متعلقات</label>
       <textarea class="form-control" [(ngModel)]="warehouseInventory.appurtenance"></textarea>
     </div>
-    <!--  </div>-->
-    <!--  <div class="row m-0 p-0 col-12 col-sm-12 mb-3 bg-white">-->
     <div class="col-6 col-sm-6">
       <label class="">توضیحات</label>
       <textarea class="form-control" [(ngModel)]="warehouseInventory.description"></textarea>
     </div>
-<!--  </div>-->
-  <div class="col-6 col-sm-6"></div>
-  <div class="col-6 col-sm-6"></div>
-  <app-operation-bottom
-    (buttonEmitter)="buttonClicked($event)"
-  ></app-operation-bottom>
-</div>
+    <div class="col-6 col-sm-6"></div>
+    <div class="col-6 col-sm-6"></div>
+    <app-operation-bottom
+      (buttonEmitter)="buttonClicked($event)"
+    ></app-operation-bottom>
+  </div>
 </div>

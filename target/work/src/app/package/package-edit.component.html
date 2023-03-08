@@ -1,0 +1,20 @@
+<div class="row px-3">
+  <div class="col-6 col-sm-6 my-3">
+    <label class="ps-3 mb-1">بارکد</label>
+    <div>
+      <input type="text" class="form-control" [(ngModel)]="package.barcode">
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 my-3">
+    <label class="ps-3 mb-1">رنگ</label>
+    <div>
+      <input type="color" class="form-control" [(ngModel)]="package.color">
+    </div>
+  </div>
+  <div class="col-12 col-sm-12 my-3">
+    <app-operation-bottom
+      (buttonEmitter)="buttonClicked($event)"
+    ></app-operation-bottom>
+  </div>
+  <!--  <div class="col-6 col-sm-6"></div>-->
+</div>

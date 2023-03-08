@@ -32,15 +32,21 @@ import {ContextMenuModule} from "primeng/contextmenu";
 import {ToastModule} from "primeng/toast";
 import {DecimalPipe} from '@angular/common';
 import {DpDatePickerModule} from "ng2-jalali-date-picker";
-import { PackageComponent } from './package/package.component';
-import { PackageEditComponent } from './package/package-edit.component';
+import {PackageComponent} from './package/package.component';
+import {PackageEditComponent} from './package/package-edit.component';
 import {TooltipModule} from "primeng/tooltip";
 import {ConfirmDialogModule} from "primeng/confirmdialog";
 import {ConfirmationService} from "primeng/api";
 import {MessagesModule} from "primeng/messages";
-import { ForwardingComponent } from './forwarding/forwarding.component';
-import { ForwardingEditComponent } from './forwarding/forwarding-edit.component';
-// import {MatDatepickerModulePersian} from '@angular-persian/material-date-picker';
+import {ForwardingComponent} from './forwarding/forwarding.component';
+import {ForwardingEditComponent} from './forwarding/forwarding-edit.component';
+import {CeidSelectComponent} from './general/utility/input-tools/ceid-select/ceid-select.component';
+import {QRCodeModule} from "angularx-qrcode";
+import {JalaliPipe} from "./general/utility/pipeTools/dateTimeTools/jalali-pipe";
+import { WarehouseSearchComponent } from './warehouse/warehouse-search.component';
+import { ColorComponent } from './color/color.component';
+import {NgxScannerQrcodeModule} from "ngx-scanner-qrcode";
+
 
 @NgModule({
   declarations: [
@@ -71,6 +77,10 @@ import { ForwardingEditComponent } from './forwarding/forwarding-edit.component'
     PackageEditComponent,
     ForwardingComponent,
     ForwardingEditComponent,
+    CeidSelectComponent,
+    JalaliPipe,
+    WarehouseSearchComponent,
+    ColorComponent,
   ],
   imports: [
     BrowserModule,
@@ -81,8 +91,8 @@ import { ForwardingEditComponent } from './forwarding/forwarding-edit.component'
     BrowserAnimationsModule,
     ContextMenuModule,
     ReactiveFormsModule,
-    // MatDatepickerModulePersian,
-    // NgPersianDatepickerModule,
+    QRCodeModule,
+    NgxScannerQrcodeModule,
     ToastModule,
     DpDatePickerModule,
     TooltipModule,
@@ -92,6 +102,7 @@ import { ForwardingEditComponent } from './forwarding/forwarding-edit.component'
   providers: [
     DecimalPipe,
     ConfirmationService,
+    JalaliPipe,
   ],
   bootstrap: [AppComponent]
 })

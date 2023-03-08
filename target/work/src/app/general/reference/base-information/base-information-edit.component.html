@@ -1,0 +1,42 @@
+<div class="row m-0 p-0 col-12 col-sm-12 h-100">
+  <label class="col-12 col-sm-12 control-label text-danger">اطلاعات اوليه</label>
+  <div class="row m-0 mt-3 p-0 col-6 col-sm-6">
+    <div>
+      <p-tree
+        [value]="treeNode"
+        [contextMenu]="rightMenu"
+        selectionMode="single"
+        [(selection)]="selectedFile"
+      ></p-tree>
+      <p-contextMenu #rightMenu [model]="menuItems"></p-contextMenu>
+      <!--      <p-toast></p-toast>-->
+    </div>
+  </div>
+  <div class="row m-0 mt-3 p-0 col-6 col-sm-6" *ngIf="addNode">
+    <label>نام</label>
+    <div class="col-6 col-sm-6">
+      <input type="text" class="form-control" [(ngModel)]="label">
+    </div>
+    <div class="row m-0 mt-3 p-0 col-12 col-sm-12">
+    <span style="width: 8rem;">
+    <button class="btn btn-primary w-100" (click)="save()">
+      ثبت
+      <i class="fa fa-save"></i>
+    </button>
+    </span>
+      <span style="width: 8rem;">
+    <button class="btn btn-danger w-100">
+      بازنشانی
+      <i class="fa fa-refresh"></i>
+    </button>
+    </span>
+      <span style="width: 8rem;">
+    <button class="btn btn-warning w-100" (click)="switchToGrid()">
+      بازگشت
+      <i class="fa fa-backspace"></i>
+    </button>
+    </span>
+    </div>
+  </div>
+</div>
+&nbsp;

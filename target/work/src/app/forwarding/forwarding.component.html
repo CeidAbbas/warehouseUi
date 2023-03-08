@@ -1,0 +1,66 @@
+<div class="m-3 p-2">
+  <div class="card">
+    <header class="bg-light row m-0">
+      <h2 class="col-sm-7 lh-4" *ngIf="!editMode; else showEditModeTitle">{{ title }} {{ forwardingTitle }}</h2>
+      <ng-template #showEditModeTitle>
+        <h2 class="col-sm-7 lh-4">
+          {{ editModeTitle }}
+        </h2>
+      </ng-template>
+      <div class="text-end col-sm-5 lh-lg">
+        <app-header-tools
+          (editModeEmitter)="editModeBack($event)"
+          (reloadEmitter)="reload()"
+          [editMode]="editMode"
+        ></app-header-tools>
+      </div>
+    </header>
+    <article class="">
+      <table class="table table-bordered table-striped table-hover"
+             *ngIf="!editMode && forwardings.length > 0">
+        <thead>
+        <tr class>
+          <th>حمل کننده</th>
+          <th>تحویل گیرنده</th>
+          <th>رنگ بسته بندی</th>
+          <th>رنگ بسته بندی</th>
+          <th>وسیله حمل و نقل</th>
+          <th>تاریخ ارسال</th>
+          <th>تاریخ تحویل</th>
+          <!--          <th></th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="" *ngFor="let forwarding of forwardings"
+            (dblclick)="switchToEditMode(forwarding.id)"
+        >
+          <td> {{ forwarding.transporterFullName }}</td>
+          <td> {{ forwarding.receiverFullName }}</td>
+          <td [style]="'background-color:' + forwarding.packagesColor + ';'"></td>
+          <td class="p-0">
+            <qrcode [qrdata]="forwarding.packagesId"
+                    [errorCorrectionLevel]="'M'"
+                    [colorLight]="'#00000000'"
+                    [width]="150"
+                    style=""
+                    [cssClass]="'bordered'"
+            ></qrcode>
+          </td>
+          <td> {{ forwarding.carrierTitle }}</td>
+          <td> {{ forwarding.transportDate }}</td>
+          <td> {{ forwarding.receiveDate }}</td>
+          <!--          <td> {{ forwarding. }}</td>-->
+        </tr>
+        </tbody>
+      </table>
+      <div class="" *ngIf="editMode">
+        <app-forwarding-edit
+          (switchToGrid)="editModeBack($event)"
+        >
+          <!--          [personId]="editLoadId"-->
+          <!--          (editModeEmitter)="editModeBack($event)"-->
+        </app-forwarding-edit>
+      </div>
+    </article>
+  </div>
+</div>

@@ -1,0 +1,81 @@
+<div class="m-0 p-0">
+  <div class="card">
+    <header class="bg-light row m-0">
+      <h2 class="col-sm-10 lh-4"> {{ title }} {{ warehouseTitle }}
+        <span *ngIf="selectedPackageColor != null && selectedPackageColor != ''"> بسته انتخاب شده
+          <input type="color"
+                 [value]="selectedPackageColor"
+                 disabled>
+        </span>
+      </h2>
+      <div class="text-end col-sm-2 lh-lg">
+        <app-header-tools
+          (reloadEmitter)="reload()"
+          [showPlus]="false"
+          (editModeEmitter)="editMode=$event"
+        ></app-header-tools>
+      </div>
+    </header>
+    <article class="p-3">
+      <table class="table table-bordered table-striped table-hover col-12 col-sm-12">
+        <thead>
+        <tr class>
+          <th>نام كالا</th>
+          <th>نام انبار</th>
+          <!--          <th>شماره سریال</th>-->
+          <th>تاريخ انقضاء</th>
+          <!--          <th>شماره قرارداد</th>-->
+          <th>عملیات</th>
+          <!--          <th></th>-->
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="" *ngFor="let warehouseInventory of warehouseInventories">
+          <td> {{ warehouseInventory.wareName }}</td>
+          <td> {{ warehouseInventory.warehouseTitle }}</td>
+          <!--          <td> {{ warehouseInventory.inventory }}</td>-->
+          <!--          <td> {{ warehouseInventory.serial }}</td>-->
+          <td> {{ warehouseInventory.expirationDate ? warehouseInventory.expirationDate : 'ندارد' }}</td>
+          <!--          <td> {{ warehouseInventory.contractNumber }}</td>-->
+          <td>
+            <input class="mx-1" type="checkbox"
+                   [name]="warehouseInventory.id" value=""
+                   [(ngModel)]="warehouseInventory.isSelected"
+                   *ngIf="originLocation == 'export' && showPackages">
+            <i class="pi pi-arrow-down text-danger fw-bold mx-1"
+               (click)="openPackage()"
+               *ngIf="originLocation == 'export' && !showPackages"></i>
+            <i class="pi pi-info-circle text-info fw-bold fs-5 mx-1"></i>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <!--      <div class="col-12 col-sm-12 p-3">-->
+      <!--        <div class="border offset-11 text-center rounded-circle bg-success text-white"-->
+      <!--             style="line-height: 3.7rem"-->
+      <!--             (click)="addToPackage()"-->
+      <!--        >-->
+      <!--        <i class="pi pi-plus fw-bold"></i>-->
+      <!--        </div>-->
+      <!--      </div>-->
+      <p-messages [value]="message" [showTransitionOptions]="'300ms ease-out'"
+                  [hideTransitionOptions]="'400ms cubic-bezier(0.86, 0, 0.07, 1)'"></p-messages>
+      <div class="col-12"
+           *ngIf="showPackages"
+      >
+        <app-package
+          #packageComponent
+          (selectedPackage)="getPackage($event)"
+          (finishedPackaging)="finishedPackaging($event)"
+        ></app-package>
+      </div>
+      <!--      <div class="" *ngIf="editMode">-->
+      <!--&lt;!&ndash;          [warehouseId]="editLoadId"&ndash;&gt;-->
+      <!--        <app-warehouse-inventory-edit-->
+      <!--          (editModeEmitter)="editModeBack($event)"-->
+      <!--        ></app-warehouse-inventory-edit>-->
+      <!--      </div>-->
+    </article>
+  </div>
+</div>
+

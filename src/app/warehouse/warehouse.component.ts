@@ -5,7 +5,6 @@ import {WareService} from '../ware/ware.service';
 import {Ware} from '../ware/ware';
 import {WarehouseInventory} from '../warehouse-inventory/warehouse-inventory';
 import {WarehouseInventoryService} from '../warehouse-inventory/warehouse-inventory.service';
-import {Person} from "../person/person";
 
 @Component({
   selector: 'app-warehouse',
@@ -17,17 +16,18 @@ export class WarehouseComponent implements OnInit {
   public warehouses?: Warehouse[];
   public warehousesFiltered?: Warehouse[];
   public warehouseInventories: WarehouseInventory[] = [];
-  public warehouseSearch?: Warehouse;
+  public warehouseSearchModel?: Warehouse;
   public wares?: Ware[];
   public title = 'انبار';
-  public warehouseTitle = 'بهار';
+  public warehouseTitle = '';
   public warehouseTitles = '';
   @Input() sourceLoad = true;
   public editModeTitle = 'ویرایش انبار';
   public editMode = false;
+  public searchMode = false;
   public editLoadId = '';
   public importDiv = false;
-  public exportDiv = true;
+  public exportDiv = false;
   public showInventory = false;
   public warehouseId = '';
   public modalHeader = '';
@@ -119,5 +119,21 @@ export class WarehouseComponent implements OnInit {
       this.importDiv = this.importDiv = false;
       this.exportDiv = this.exportDiv = false;
     }
+  }
+
+  searchModeBack($event: boolean) {
+    this.searchMode = !this.searchMode;
+  }
+
+  searchConfig($event: Warehouse) {
+    console.log($event);
+    this.warehouseSearchModel = $event;
+    this.searchMode = false;
+    this.warehouseService.getAllWarehouses().subscribe(warehouses => {
+      this.warehouses = [];
+      this.warehouses = (warehouses.filter(warehouse => {
+        return warehouse.name.search(this.warehouseSearchModel.name) != -1;// && warehouse.status == this.warehouseSearchModel.status;
+      }));
+    });
   }
 }

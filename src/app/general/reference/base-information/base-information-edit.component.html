@@ -15,7 +15,10 @@
   <div class="row m-0 mt-3 p-0 col-6 col-sm-6" *ngIf="addNode">
     <label>نام</label>
     <div class="col-6 col-sm-6">
-      <input type="text" class="form-control" [(ngModel)]="label">
+      <input *ngIf="!colorMode; else colorModeFalse" type="text" class="form-control" [(ngModel)]="label">
+      <ng-template #colorModeFalse>
+        <input type="color" [(ngModel)]="label">
+      </ng-template>
     </div>
     <div class="row m-0 mt-3 p-0 col-12 col-sm-12">
     <span style="width: 8rem;">

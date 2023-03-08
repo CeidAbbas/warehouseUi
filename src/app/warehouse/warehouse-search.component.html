@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4 col-sm-4">
+      <label>نام انبار</label>
+      <input type="text" class="form-control" [(ngModel)]="warehouseSearchModel.name">
+    </div>
+    <div class="col-4 col-sm-4">
+      <label >وضعیت</label>
+      <ceid-select
+        [selectClass]="'form-control'"
+        [rest]="'rest/baseInformation/getAll'"
+        [parent]="'da11a9f4-56c6-42d9-8477-7fbf3c2bf543'"
+        [isBaseInformation]="true"
+        [titleName]="'label'"
+        (sendValue)="warehouseSearchModel.status = $event"
+        [selectValue]="''"
+        [selected]="'فعال'"
+      ></ceid-select>
+<!--        [parent]="'57f2560e-2839-4f48-a4a4-0254754e0ef5'"-->
+    </div>
+    <div class="col-4 col-sm-4">
+      <label style="color: #00000000">ش</label>
+      <input type="button" class="btn btn-primary form-control" value="جستجو" (click)="search()">
+    </div>
+    <div class="col-4 col-sm-4"></div>
+  </div>
+</div>

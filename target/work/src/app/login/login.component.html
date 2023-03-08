@@ -1,0 +1,28 @@
+<div class="row col-6 col-sm-6 align-center pr-2 pl-2 mt-lg-5 m-auto" style="border-radius: 5%; background-color: gainsboro">
+  <div class="col-6 col-sm-6 p-0 pt-5">
+    <div class="col-12 col-sm-12 p-0 pt-5">
+<!--      <h3 class="text-center">ورود</h3>-->
+      <div class="col-11 col-11">
+        <input type="text" class="form-control m-3 text-end" [(ngModel)]="user">
+      </div>
+      <div class="col-11 col-11">
+        <input type="password" class="form-control m-3 text-end" [(ngModel)]="password">
+      </div>
+<!--      <div class="col-sm-12 col-12 row m-3">-->
+<!--        <div class="col-sm-6 col-6">-->
+<!--          <input type="checkbox">-->
+<!--        </div>-->
+<!--        <span class="col-sm-6 col-6 text-end p-0">فراموشی رمز</span>-->
+<!--      </div>-->
+      <button type="button" class="btn btn-primary col-11 col-sm-11 m-3"
+              [disabled]="!connection"
+              (click)="login()">
+        <span class="font-weight-6">ورود </span>
+        <i class="fa fa-arrow-left"></i>
+      </button>
+    </div>
+  </div>
+  <div class="col-6 col-sm-6 p-0">
+    <img class="col-12" src="./assets/img/warehouse.jpg" style="border-radius: 5% 0 0 5%">
+  </div>
+</div>

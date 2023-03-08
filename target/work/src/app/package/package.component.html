@@ -1,0 +1,36 @@
+<div *ngIf="!editMode; else editModes">
+  <table class="table table-striped table-bordered table-hover">
+    <thead class="table-responsive">
+    <tr>
+      <th class="">بارکد</th>
+      <th class="">رنگ</th>
+      <th class="">وضعیت</th>
+      <th class="">عملیت</th>
+    </tr>
+    </thead>
+    <tbody class="table-responsive">
+    <tr *ngFor="let entity of packages" [class]="selectedPackageId == entity.id ? 'selectedPackage' : ''">
+      <td class="">{{ entity.barcode }}</td>
+      <td class="">{{ entity.color }} <input type="color" [value]="entity.color"></td>
+      <td class="">{{ entity.status ? 'باز' : 'بسته' }}</td>
+      <td>
+        <input type="radio"
+               class="mx-1"
+               [value]="entity.isSelected"
+               (click)="selectPackage(entity)"
+               name="selectedPackage">
+        <i class="pi pi-pencil circle mx-1" *ngIf="entity.id != selectedPackageId"></i>
+        <ng-container *ngIf="entity.id == selectedPackageId">
+          <i class="pi pi-check mx-1" [pTooltip]="'اتمام بسته بندی'" [tooltipPosition]="'top'" (click)="finishPackaging(entity)"></i>
+          <i class="pi pi-times mx-1" [pTooltip]="'لغو بسته بندی'" [tooltipPosition]="'top'" (click)="cancelPackaging(entity)"></i>
+        </ng-container>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<p-confirmDialog ></p-confirmDialog>
+<ng-template #editModes
+>
+  <app-package-edit></app-package-edit>
+</ng-template>

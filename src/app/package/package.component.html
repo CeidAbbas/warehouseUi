@@ -1,36 +1,92 @@
-<div *ngIf="!editMode; else editModes">
-  <table class="table table-striped table-bordered table-hover">
-    <thead class="table-responsive">
-    <tr>
-      <th class="">بارکد</th>
-      <th class="">رنگ</th>
-      <th class="">وضعیت</th>
-      <th class="">عملیت</th>
-    </tr>
-    </thead>
-    <tbody class="table-responsive">
-    <tr *ngFor="let entity of packages" [class]="selectedPackageId == entity.id ? 'selectedPackage' : ''">
-      <td class="">{{ entity.barcode }}</td>
-      <td class="">{{ entity.color }} <input type="color" [value]="entity.color"></td>
-      <td class="">{{ entity.status ? 'باز' : 'بسته' }}</td>
-      <td>
-        <input type="radio"
-               class="mx-1"
-               [value]="entity.isSelected"
-               (click)="selectPackage(entity)"
-               name="selectedPackage">
-        <i class="pi pi-pencil circle mx-1" *ngIf="entity.id != selectedPackageId"></i>
-        <ng-container *ngIf="entity.id == selectedPackageId">
-          <i class="pi pi-check mx-1" [pTooltip]="'اتمام بسته بندی'" [tooltipPosition]="'top'" (click)="finishPackaging(entity)"></i>
-          <i class="pi pi-times mx-1" [pTooltip]="'لغو بسته بندی'" [tooltipPosition]="'top'" (click)="cancelPackaging(entity)"></i>
-        </ng-container>
-      </td>
-    </tr>
-    </tbody>
-  </table>
+<div class="m-3 p-2">
+  <div class="bg-light">
+    <i class="fa fa-plus-square fa-2x col-1 offset-11" (click)="createNewPackage()"></i>
+<!--    <ngx-scanner-qrcode #action="scanner" [src]="'https://domain.com/test.png'"></ngx-scanner-qrcode>-->
+
+    <!-- data  -->
+<!--    <span>{{ action.data.value | json }}</span>&lt;!&ndash; value &ndash;&gt;-->
+<!--    <span>{{ action.data | async | json }}</span>&lt;!&ndash; async &ndash;&gt;-->
+
+    <!-- Loading -->
+<!--    <p *ngIf="action.isLoading">⌛ Loading...</p>-->
+
+    <!-- start -->
+<!--    <button (click)="action.isStart ? action.stop() : action.start()">{{action.isStart ? 'Stop' : 'Start'}}</button>-->
+
+
+
+
+    <!-- ngx-scanner-qrcode -->
+    <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event)"></ngx-scanner-qrcode>
+
+    <!-- data  -->
+    <!-- <p class="data">{{ (action.data | async | json) }}</p> -->
+
+    <!-- loading -->
+    <p *ngIf="action.isLoading">⌛ Loading...</p>
+
+    <!-- start/stop -->
+    <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="action.isLoading" (click)="handle(action, action.isStart ? 'stop' : 'start')">
+      <img [src]="action.isStart ? 'https://id1945.github.io/images/svg/camera-off.svg' : 'https://id1945.github.io/images/svg/camera-on.svg'" width="30px"/>
+    </button>
+
+    <!-- play/pause -->
+    <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="handle(action, action.isPause ? 'play' : 'pause')">
+      <img [src]="action.isPause ? 'https://id1945.github.io/images/svg/play.svg': 'https://id1945.github.io/images/svg/pause.svg'" width="30px"/>
+    </button>
+
+
+
+    <div *ngIf="!editMode; else editModes">
+      <table class="table table-striped table-bordered table-hover">
+        <thead class="table-responsive">
+        <tr>
+          <th class="">رمزینه</th>
+          <!--      <th class="">رنگ</th>-->
+          <th class="">وضعیت</th>
+          <th class="">عملیت</th>
+        </tr>
+        </thead>
+        <tbody class="table-responsive">
+        <tr *ngFor="let entity of packages" [class]="selectedPackageId == entity.id ? 'selectedPackage' : ''">
+          <td class="">
+            <qrcode [qrdata]="entity.id"
+                    [errorCorrectionLevel]="'M'"
+                    [colorLight]="'#00000000'"
+                    [width]="150"
+                    style=""
+                    [cssClass]="'bordered'"
+            ></qrcode>
+          </td>
+          <!--      <td class=""> <input type="color" [value]="entity.color"></td>-->
+          <td [class]="entity.status ? 'text-success' : 'text-danger'" class="fw-bold">
+            <i [class]="entity.status ? 'fa-box-open' : 'fa-box-close'" class="fa"></i>
+          </td>
+          <td>
+            <input type="radio"
+                   class="mx-1"
+                   [value]="entity.isSelected"
+                   (click)="selectPackage(entity)"
+                   name="selectedPackage">
+            <!--        <i class="pi pi-pencil circle mx-1" *ngIf="entity.id != selectedPackageId"></i>-->
+            <ng-container *ngIf="entity.id == selectedPackageId">
+              <i class="pi pi-check mx-1" [pTooltip]="'اتمام بسته بندی'" [tooltipPosition]="'top'"
+                 (click)="finishPackaging(entity)"></i>
+              <i class="pi pi-times mx-1" [pTooltip]="'لغو بسته بندی'" [tooltipPosition]="'top'"
+                 (click)="cancelPackaging(entity)"></i>
+              <input type="text" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)" #selectedWare>
+              <i class="fa fa-plus" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"></i>
+            </ng-container>
+            <!--        <i class="fa fa-plus" [pTooltip]="'افزودن کالا به بسته بندی'"></i>-->
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+    <p-confirmDialog></p-confirmDialog>
+    <ng-template #editModes
+    >
+      <app-package-edit></app-package-edit>
+    </ng-template>
+  </div>
 </div>
-<p-confirmDialog ></p-confirmDialog>
-<ng-template #editModes
->
-  <app-package-edit></app-package-edit>
-</ng-template>

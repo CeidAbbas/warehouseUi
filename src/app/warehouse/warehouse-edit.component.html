@@ -6,16 +6,14 @@
         <input type="text" class="form-control" [(ngModel)]="warehouse.name">
       </div>
     </div>
-    <div class="col-6 col-sm-6">
-      <label class="col-12 col-sm-12 control-label text-danger">ظرفیت</label>
-      <div class="col-12 col-sm-12">
-        <input type="text" class="form-control" [(ngModel)]="warehouse.capacity">
-      </div>
-    </div>
-  </div>
-  <div class="row m-0 mt-3 p-0 col-12 col-sm-12">
-    <div class="col-6 col-sm-6">
-      وضعیت
+<!--    <div class="col-6 col-sm-6">-->
+<!--      <label class="col-12 col-sm-12 control-label text-danger">ظرفیت</label>-->
+<!--      <div class="col-12 col-sm-12">-->
+<!--        <input type="text" class="form-control" [(ngModel)]="warehouse.capacity">-->
+<!--      </div>-->
+<!--    </div>-->
+    <div class="col-6 col-sm-6 px-4">
+      <label class="col-12 col-sm-12 control-label">وضعیت فعالیت</label>
       <input type="checkbox" [(ngModel)]="warehouse.status">
     </div>
     <div class="col-6 col-sm-6">
@@ -42,8 +40,3 @@
     </span>
   </div>
 </div>
-<!--<jqxLoader #jqxLoader-->
-<!--           [text]="'hello'"-->
-<!--           [width]="60"-->
-<!--           [height]="60">-->
-<!--</jqxLoader>-->

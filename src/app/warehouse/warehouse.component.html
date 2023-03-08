@@ -1,4 +1,4 @@
-<div class="m-3 p-2">
+<div class="">
   <div class="card">
     <header class="bg-light row m-0">
       <h2 class="col-sm-7 lh-4" *ngIf="!editMode; else editModeTitle">{{ title }} {{ warehouseTitle }}</h2>
@@ -12,18 +12,19 @@
         <app-header-tools
           (editModeEmitter)="editModeBack($event)"
           (reloadEmitter)="reload()"
+          (searchModeEmitter)="searchModeBack($event)"
           [editMode]="editMode"
         ></app-header-tools>
         </span>
       </div>
     </header>
-    <article class="">
+    <article class="p-3">
       <table class="table table-bordered table-striped table-hover"
-             *ngIf="!editMode">
+             *ngIf="!editMode && !searchMode">
         <thead>
         <tr class>
           <th>نام انبار</th>
-          <th>ظرفیت</th>
+<!--          <th>ظرفیت</th>-->
           <!--          <th>مکان</th>-->
           <th>وضعيت</th>
           <th>عملیات</th>
@@ -33,7 +34,7 @@
         <tr class="" *ngFor="let warehouse of warehouses"
             (dblclick)="switchToEditMode(warehouse.id)">
           <td> {{ warehouse.name }}</td>
-          <td> {{ warehouse.capacity }}</td>
+<!--          <td> {{ warehouse.capacity }}</td>-->
           <!--          <td> {{ warehouse.location }}</td>-->
           <td *ngIf="warehouse.status; else deactive"> فعال</td>
           <ng-template #deactive>
@@ -54,9 +55,11 @@
            style="position: absolute; top: 150px; left: 5px; z-index: 1;"
            class="bg-whit e w-100">
         <div style="height: 400px;" class="row m-0 p-0 bg-da rk m-auto w-90">
-          <div class="col-12 col-sm-12 d-flex justify-content-around modals-header" style="height: 10%; ">
-            <span class="col-12 col-sm-12">{{ modalHeader }}</span>
-            <i class="co l -1 col-sm -1 fa fa-times mt-2" style="width:1%" (click)="closeModal()"></i>
+          <div class="col-12 col-sm-12 d-flex justify-content-around modals-header p-2" style="height: 10%; ">
+            <span class="col-11 col-sm-11">{{ modalHeader }}</span>
+            <div class="col-1 col-sm-1">
+              <i class="offset-9 fa fa-times" style="width:1%" (click)="closeModal()"></i>
+            </div>
           </div>
           <div
             class=""
@@ -67,8 +70,7 @@
               [wares]="wares"
               [warehouseId]="warehouseId"
               (switchToGrid)="backFromWarehouseInventory($event)"
-            >
-            </app-warehouse-inventory-edit>
+            ></app-warehouse-inventory-edit>
           </div>
           <div
             class="p-0"
@@ -79,41 +81,8 @@
               [warehouseId]="warehouseId"
               [warehouseTitle]="warehouseTitles"
               [originLocation]="'export'"
-            >
-            </app-warehouse-inventory>
+            ></app-warehouse-inventory>
           </div>
-          <!--            <span class="text-primary"></span>
-                      <span>خروج کالا از انبار </span>
-                      <div class="row col-12 col-sm-12 m-0 p-0 bg-white">
-                        <div class="row col-12 col-sm-12 m-0 p-0">
-                          <div class="col-6 col-sm-6 m-0 p-0">
-                            <label class="label-control">كالای خروجی</label>
-                            <select class="form-control">
-                              <option value="{{ warehouseInventory.id }}"
-                                      *ngFor="let warehouseInventory of warehouseInventories">{{ warehouseInventory.wareName }}
-                              </option>
-                            </select>
-                          </div>
-                          <div class="col-6 col-sm-6 m-0 p-0">
-                            <label class="label-control">انبار مقصد</label>
-                            <select class="form-control">
-                              <option value="{{ warehouse.id }}"
-                                      *ngFor="let warehouse of warehousesFiltered">{{ warehouse.name }}
-                              </option>
-                            </select>
-                          </div>
-                          <div class="col-6 col-sm-6 m-0 p-0"></div>
-                        </div>
-                        <div class="row col-12 col-sm-12 m-0 p-0">
-                          <div class="col-6 col-sm-6 m-0 p-0"></div>
-                          <div class="col-6 col-sm-6 m-0 p-0"></div>
-                        </div>
-                        <div class="row col-12 col-sm-12 m-0 p-0">
-                          <div class="col-6 col-sm-6 m-0 p-0"></div>
-                          <div class="col-6 col-sm-6 m-0 p-0"></div>
-                        </div>
-                      </div>
-                    </div>-->
           <div
             class="p-0"
             *ngIf="showInventory"
@@ -123,8 +92,7 @@
               [warehouseId]="warehouseId"
               [warehouseTitle]="warehouseTitles"
               [originLocation]="'showInventory'"
-            >
-            </app-warehouse-inventory>
+            ></app-warehouse-inventory>
           </div>
         </div>
       </div>
@@ -133,6 +101,11 @@
           [warehouseId]="editLoadId"
           (editModeEmitter)="editModeBack($event)"
         ></app-warehouse-edit>
+      </div>
+      <div class="" *ngIf="searchMode">
+        <app-warehouse-search
+          (searchModeEmitter)="searchConfig($event)"
+        ></app-warehouse-search>
       </div>
     </article>
   </div>
