@@ -16,7 +16,7 @@
         ></app-header-tools>
       </div>
     </header>
-    <article class="p-3">
+    <article class="p-3" *ngIf="warehouseInventories != undefined && warehouseInventories.length > 0">
       <table class="table table-bordered table-striped table-hover col-12 col-sm-12">
         <thead>
         <tr class="">
@@ -30,7 +30,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr class="" *ngFor="let warehouseInventory of warehouseInventories">
+        <tr class="" *ngFor="let warehouseInventory of warehouseInventories as WatchInventory">
           <td> {{ warehouseInventory.wareName }}</td>
           <td> {{ warehouseInventory.warehouseTitle }}</td>
           <!--          <td> {{ warehouseInventory.inventory }}</td>-->
@@ -38,6 +38,7 @@
           <td> {{ warehouseInventory.expirationDate ? warehouseInventory.expirationDate : 'ندارد' }}</td>
           <td>
             <qrcode [qrdata]="warehouseInventory.id"
+                    *ngIf="warehouseInventory.id != undefined"
                     [errorCorrectionLevel]="'M'"
                     [colorLight]="'#00000000'"
                     [width]="150"
@@ -49,7 +50,7 @@
             <input class="mx-1" type="checkbox"
                    [name]="warehouseInventory.id" value=""
                    [(ngModel)]="warehouseInventory.isSelected"
-                   *ngIf="originLocation == 'export' && showPackages">
+                   *ngIf="originLocation == 'export' && showPackages && warehouseInventory.id != undefined">
             <i class="pi pi-arrow-down text-danger fw-bold mx-1"
                (click)="openPackage()"
                *ngIf="originLocation == 'export' && !showPackages"></i>

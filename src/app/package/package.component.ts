@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
+import {AfterContentInit, Component, EventEmitter, OnInit, Output, ViewChild} from '@angular/core';
 import {PackageService} from './package.service';
 import {Package} from "./package";
 import {ConfirmationService} from "primeng/api";
@@ -10,13 +10,15 @@ import {
   ScannerQRCodeSelectedFiles
 } from "ngx-scanner-qrcode";
 import {PackageWarehouseInventory} from "../packageWarehouseInventory/package-warehouse-inventory";
+import {PackageWarehouseInventoryService} from "../packageWarehouseInventory/package-warehouse-inventory.service";
+import {OverlayPanel} from "primeng/overlaypanel";
 
 @Component({
   selector: 'app-package',
   templateUrl: './package.component.html',
   styleUrls: ['./package.component.css']
 })
-export class PackageComponent implements OnInit {
+export class PackageComponent implements OnInit, AfterContentInit {
 
   // https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia
   public config: ScannerQRCodeConfig = {
@@ -28,7 +30,7 @@ export class PackageComponent implements OnInit {
     constraints: {
       audio: false,
       video: {
-        width: window.innerWidth
+        width: 300
       }
     }
   };
@@ -36,21 +38,51 @@ export class PackageComponent implements OnInit {
   public qrCodeResult: ScannerQRCodeSelectedFiles[] = [];
   public qrCodeResult2: ScannerQRCodeSelectedFiles[] = [];
 
-  @ViewChild('action') action: NgxScannerQrcodeComponent;
+  @ViewChild('action') action: NgxScannerQrcodeComponent = new NgxScannerQrcodeComponent();
+
+  public packages?: Package[];
+  public newPackage?: Package;
+  public editMode = false;
+  @Output() selectedPackage: EventEmitter<Package> = new EventEmitter();
+  @Output() finishedPackaging: EventEmitter<Package> = new EventEmitter();
+  @Output() checkSelectedWarehouseInventory: EventEmitter<string> = new EventEmitter();
+  public selectedPackageId = '';
+  public selectedPackageWarehouseInventoryId = '';
+  public sendToPackage = true;
+  packageWarehouseInventory: PackageWarehouseInventory[] = [];
+  selectedProduct: any;
+
+  constructor(
+    private qrcode: NgxScannerQrcodeService,
+    private packageService: PackageService,
+    private confirmationService: ConfirmationService,
+    private packageWarehouseInventoryService: PackageWarehouseInventoryService,
+  ) {
+  }
 
   ngAfterContentInit(): void {
-    setTimeout(() => this.action.start(), 1000);
+    // if (this.action != undefined) { // @ts-ignore
+    //   setTimeout(() => this.action.start(), 1000);
+    // }
   }
 
   public onEvent(e: ScannerQRCodeResult[]): void {
-    console.log(e);
+    if (e.length > 0 && this.selectedPackageWarehouseInventoryId != e[0].value) {
+      this.selectedPackageWarehouseInventoryId = e[0].value;
+      console.log(this.selectedPackageWarehouseInventoryId);
+      if (this.sendToPackage && this.selectedPackageId != '') {
+        this.addWarehouseInventoryToPackage(this.selectedPackageId, this.selectedPackageWarehouseInventoryId);
+        this.sendToPackage = false;
+      }
+      // this.action.stop();
+    }
   }
 
   public handle(action: any, fn: string): void {
     action[fn]().subscribe(console.log, alert);
   }
 
-  public onDowload(action): void {
+  public onDowload(action: any): void {
     action.download().subscribe(console.log, alert);
   }
 
@@ -67,23 +99,15 @@ export class PackageComponent implements OnInit {
     });
   }
 
-  public packages?: Package[];
-  public newPackage?: Package;
-  public editMode = false;
-  @Output() selectedPackage: EventEmitter<Package> = new EventEmitter();
-  @Output() finishedPackaging: EventEmitter<Package> = new EventEmitter();
-  @Output() checkSelectedWarehouseInventory: EventEmitter<string> = new EventEmitter();
-  public selectedPackageId = '';
-
-  constructor(
-    private qrcode: NgxScannerQrcodeService,
-    private packageService: PackageService,
-    private confirmationService: ConfirmationService,
-  ) {
-  }
-
   ngOnInit(): void {
     this.onLoad();
+  }
+
+  getPackageWarehouseInventory(packageWarehouseInventoryId: string = ''): void {
+    this.packageWarehouseInventoryService.getPackageWarehouseInventory(packageWarehouseInventoryId).subscribe(value => {
+      this.packageWarehouseInventory = value;
+      console.log(this.packageWarehouseInventory);
+    });
   }
 
   private onLoad() {
@@ -98,8 +122,13 @@ export class PackageComponent implements OnInit {
 
   selectPackage(entity: Package) {
     entity.isSelected = true;
-    this.selectedPackageId = entity.id;
+    if (entity.id != undefined) {
+      this.selectedPackageId = entity.id;
+    }
     this.selectedPackage.emit(entity);
+    if (this.action != undefined) { // @ts-ignore
+      setTimeout(() => this.action.start(), 1000);
+    }
   }
 
   cancelPackaging(entity: Package) {
@@ -115,6 +144,11 @@ export class PackageComponent implements OnInit {
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
         this.finishedPackaging.emit(entity);
+        entity.status = false;
+        this.packageService.savePackage(entity).subscribe(value => {
+          this.onLoad();
+        });
+        // this.packageService.
         // this.msgs = [{severity:'info', summary:'Confirmed', detail:'You have accepted'}];
       },
       reject: () => {
@@ -129,7 +163,6 @@ export class PackageComponent implements OnInit {
     this.newPackage.status = true;
     this.packageService.savePackage(this.newPackage).subscribe(newPackage => {
       this.onLoad();
-      console.log(newPackage);
     });
   }
 
@@ -140,6 +173,14 @@ export class PackageComponent implements OnInit {
     }
     this.packageService.addWarehouseInventoryToPackage(packageWarehouseInventory).subscribe(result => {
       console.log(result);
+      this.sendToPackage = false;
+    }, error => {
+      console.log(error);
+      this.sendToPackage = true;
     });
+  }
+
+  onRowSelect($event: any) {
+
   }
 }

@@ -26,11 +26,11 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
   baseInformationHeader!: string;
   plusMode: any;
   parent = '';
-  label = '';
+  label?= '';
 
-  treeNode: TreeNode[];
-  selectedFile: TreeNode;
-  menuItems: MenuItem[];
+  treeNode: TreeNode[] = [];
+  selectedFile: TreeNode | null = null;
+  menuItems: MenuItem[] = [];
 
   ngAfterViewInit(): void {
     // setTimeout(() => {
@@ -62,7 +62,8 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
     let hierarchy: string;
     this.parent = this.baseInformation.id as string;
     if (mode === 'add') {
-      this.baseInformation.id = null;
+      this.baseInformation.id = '';
+      // @ts-ignore
       hierarchy = this.baseInformation.hierarchy + this.transformDecimal(this.baseInformation.children.length + 1);
       if (file.hierarchy == '009') {
         this.colorMode = true;
@@ -75,8 +76,10 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
         this.colorMode = true;
       }
       this.label = this.baseInformation.label;
+      if (this.baseInformation.hierarchy != undefined) {
       hierarchy = this.baseInformation.hierarchy;
       this.baseInformation.hierarchy = hierarchy;
+      }
       this.addNode = true;
     }
   }
@@ -95,13 +98,13 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
 
   save() {
     this.baseInformation.label = this.label;
-    this.baseInformation.children = null;
-    this.baseInformation.parent = null;
+    this.baseInformation.children = new Array<BaseInformation>();
+    this.baseInformation.parent = '';
     this.baseInformationService.saveBaseInformation(this.baseInformation, this.parent).subscribe(
       data => {
         this.onLoad();
         this.addNode = false;
-        this.label = null;
+        this.label = '';
         this.baseInformation = new BaseInformation();
       }
     );
@@ -156,8 +159,10 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
     let baseInformationsTree: BaseInformation[] = [];
     baseInformationHeader.children = new Array<BaseInformation>();
     baseInformations.filter(baseInformation => {
+      // @ts-ignore
       if (baseInformation.hierarchy !== baseInformationHeader.hierarchy && baseInformation.hierarchy.search(baseInformationHeader.hierarchy) === 0 && (baseInformationHeader.hierarchy.length + 3) === baseInformation.hierarchy.length) {
         let bae = this.getChild(baseInformation, baseInformations);
+        // @ts-ignore
         baseInformationHeader.children.push(bae[0] as BaseInformation);
       }
     });
@@ -165,7 +170,7 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
     return baseInformationsTree;
   }
 
-  transformDecimal(num) {
+  transformDecimal(num: number) {
     return this.decimalPipe.transform(num, '3.');
   }
 }

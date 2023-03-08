@@ -11,7 +11,7 @@ export class WarehouseEditComponent implements OnInit {
 
   public warehouse: Warehouse;
   public editLoadId?: string;
-  @Input() public warehouseId = '';
+  @Input() public warehouseId: string = '';
   @Output() public editModeEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
   showHideLoaderFlag = false;
 

@@ -17,7 +17,7 @@ export class WarehouseInventoryEditComponent implements OnInit {
   public warehouseInventory: WarehouseInventory = new WarehouseInventory();
   @Input() public wares?: Ware[];
   public producers?: Person[];
-  @Input() public warehouseId?: string;
+  @Input() warehouseId?: string;
   @Output() public switchToGrid: EventEmitter<boolean> = new EventEmitter<boolean>();
   expirationDate: any;
   entryDate: any;

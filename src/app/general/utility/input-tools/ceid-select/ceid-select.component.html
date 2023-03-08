@@ -1,4 +1,4 @@
 <select [class]="selectClass" (change)="onChange()" [(ngModel)]="selectValue">
 <!--  <option value="-1" selected="selected">...</option>-->
-  <option [value]="model.id" *ngFor="let model of models" >{{ model[titleName] }}</option>
+  <option [value]="model.id" *ngFor="let model of models" >{{ model.titleName }}</option>
 </select>

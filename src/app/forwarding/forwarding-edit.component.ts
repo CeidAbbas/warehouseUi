@@ -11,7 +11,7 @@ export class ForwardingEditComponent implements OnInit {
 
   forwarding: Forwarding = new Forwarding();
   @Output() switchToGrid: EventEmitter<boolean> = new EventEmitter();
-  emptyString: '';
+  emptyString: string = '';
 
   constructor(
     private forwardingService: ForwardingService,

@@ -8,15 +8,15 @@ import {CeidSelectService} from "./ceid-select.service";
 })
 export class CeidSelectComponent<M> implements OnInit {
 
-  public models: M[] = [];
-  @Input() selectClass: '';
-  @Input() rest: '';
+  public models?: M[] | any= [];
+  @Input() selectClass: string = '';
+  @Input() rest: string = '';
   @Input() isBaseInformation = false;
   @Input() titleName = '';
   @Input() parent = '';
   @Input() selected = '';
-  @Input() selectValue = '';
-  @Output() sendValue: EventEmitter<string> = new EventEmitter<string>();
+  @Input() selectValue: any;
+  @Output() sendValue: EventEmitter<any> = new EventEmitter<any>();
 
   constructor(
     private ceidSelectService: CeidSelectService,
@@ -27,7 +27,7 @@ export class CeidSelectComponent<M> implements OnInit {
     console.log(this.selected);
     if (this.isBaseInformation) {
       this.ceidSelectService.getBaseInformationData(this.rest).subscribe(res => {
-        this.models = res.filter(model => {
+        this.models = res.filter((model: { parent: string; }) => {
           return model.parent == this.parent;
         });
       });

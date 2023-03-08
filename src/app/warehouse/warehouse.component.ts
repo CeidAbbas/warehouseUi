@@ -91,6 +91,7 @@ export class WarehouseComponent implements OnInit {
     if (this.exportDiv) {
       this.warehouseInventoryService.getByWarehouseId(this.warehouseId).subscribe(warehouseInventories => {
         this.warehouseInventories = warehouseInventories;
+        // @ts-ignore
         this.warehousesFiltered = this.warehouses.filter(warehouse => {
           return warehouse.id !== this.warehouseId;
         });
@@ -124,16 +125,18 @@ export class WarehouseComponent implements OnInit {
   searchModeBack($event: boolean) {
     this.searchMode = !this.searchMode;
   }
-
-  searchConfig($event: Warehouse) {
-    console.log($event);
-    this.warehouseSearchModel = $event;
+  searchConfig(vent: Warehouse | undefined | any) {
+    console.log(vent);
+    this.warehouseSearchModel = vent;
     this.searchMode = false;
     this.warehouseService.getAllWarehouses().subscribe(warehouses => {
       this.warehouses = [];
+      if (warehouses.length > 0) {
       this.warehouses = (warehouses.filter(warehouse => {
+        // @ts-ignore
         return warehouse.name.search(this.warehouseSearchModel.name) != -1;// && warehouse.status == this.warehouseSearchModel.status;
       }));
+      }
     });
   }
 }

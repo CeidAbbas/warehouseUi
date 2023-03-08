@@ -1,41 +1,62 @@
 <div class="m-3 p-2">
   <div class="bg-light">
     <i class="fa fa-plus-square fa-2x col-1 offset-11" (click)="createNewPackage()"></i>
-<!--    <ngx-scanner-qrcode #action="scanner" [src]="'https://domain.com/test.png'"></ngx-scanner-qrcode>-->
+    <!--    <ngx-scanner-qrcode #action="scanner" [src]="'https://domain.com/test.png'"></ngx-scanner-qrcode>-->
 
     <!-- data  -->
-<!--    <span>{{ action.data.value | json }}</span>&lt;!&ndash; value &ndash;&gt;-->
-<!--    <span>{{ action.data | async | json }}</span>&lt;!&ndash; async &ndash;&gt;-->
+    <!--    <span>{{ action.data.value | json }}</span>&lt;!&ndash; value &ndash;&gt;-->
+    <!--    <span>{{ action.data | async | json }}</span>&lt;!&ndash; async &ndash;&gt;-->
 
     <!-- Loading -->
-<!--    <p *ngIf="action.isLoading">⌛ Loading...</p>-->
+    <!--    <p *ngIf="action.isLoading">⌛ Loading...</p>-->
 
     <!-- start -->
-<!--    <button (click)="action.isStart ? action.stop() : action.start()">{{action.isStart ? 'Stop' : 'Start'}}</button>-->
+    <!--    <button (click)="action.isStart ? action.stop() : action.start()">{{action.isStart ? 'Stop' : 'Start'}}</button>-->
 
 
+    <!--     ngx-scanner-qrcode -->
+    <div class="row">
+      <div class="col-4">
+        <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event)"></ngx-scanner-qrcode>
+      </div>
+      <div class="col-8">
+        <!--    &lt;!&ndash; data  &ndash;&gt;-->
+        <!--        <p class="data">{{ (action.data | async | json) }}</p>-->
+        <p class="data" *ngIf="!sendToPackage">کالای مد نظر انتخاب شده است</p>
+<!--        <button *ngIf="!sendToPackage" (click)="selectedPackageId = ''; sendToPackage = true" class="btn btn-danger">حذف-->
+<!--          کالا-->
+<!--        </button>-->
 
+        <!--    &lt;!&ndash; loading &ndash;&gt;-->
+        <p *ngIf="action.isLoading">⌛ Loading...</p>
 
-    <!-- ngx-scanner-qrcode -->
-    <ngx-scanner-qrcode #action="scanner" [config]="config" (event)="onEvent($event)"></ngx-scanner-qrcode>
+        <!--    &lt;!&ndash; start/stop &ndash;&gt;-->
+        <button class="btn" [class.btn-info]="!action.isStart"
+                [class.btn-warning]="action.isStart"
+                [pTooltip]="action.isStart ? '' : 'توقف خوانش'"
+                [disabled]="action.isLoading || !action.isStart" (click)="handle(action, action.isStart ? 'stop' : 'start')">
+          <i class="bi fw-bold" [class]="action.isStart ? 'bi-camera-video-off' : 'bi-camera-video'"></i>
+        </button>
+&zwnj;
+        <!--    &lt;!&ndash; play/pause &ndash;&gt;-->
+        <button class="btn" [class.btn-info]="!action.isStart"
+                [class.btn-warning]="action.isStart"
+                [pTooltip]="!action.isPause && action.isStart ? '' : 'مکث خوانش'"
+                [disabled]="!action.isStart" (click)="handle(action, action.isPause ? 'play' : 'pause')">
+          <i class="bi fw-bold" [class]="action.isPause ? 'bi-play-circle' : 'bi-pause-circle'"></i>
+        </button>
+      </div>
+    </div>
 
-    <!-- data  -->
-    <!-- <p class="data">{{ (action.data | async | json) }}</p> -->
+    <!--    &lt;!&ndash; isTorch &ndash;&gt;-->
+    <!-- <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="action.isTorch = !action.isTorch; handle(action, 'torcher')">
+       <img [src]="action.isTorch ? 'https://id1945.github.io/images/svg/flash-off.svg' : 'https://id1945.github.io/images/svg/flash-on.svg'" width="30px"/>
+     </button>-->
 
-    <!-- loading -->
-    <p *ngIf="action.isLoading">⌛ Loading...</p>
-
-    <!-- start/stop -->
-    <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="action.isLoading" (click)="handle(action, action.isStart ? 'stop' : 'start')">
-      <img [src]="action.isStart ? 'https://id1945.github.io/images/svg/camera-off.svg' : 'https://id1945.github.io/images/svg/camera-on.svg'" width="30px"/>
-    </button>
-
-    <!-- play/pause -->
-    <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="handle(action, action.isPause ? 'play' : 'pause')">
-      <img [src]="action.isPause ? 'https://id1945.github.io/images/svg/play.svg': 'https://id1945.github.io/images/svg/pause.svg'" width="30px"/>
-    </button>
-
-
+    <!--    &lt;!&ndash; download &ndash;&gt;-->
+    <!-- <button class="btn" [class.btn-info]="!action.isStart" [class.btn-warning]="action.isStart" [disabled]="!action.isStart" (click)="onDowload(action)">
+ &lt;!&ndash;      <img src="https://id1945.github.io/images/svg/capture.svg" width="30px"/>&ndash;&gt;
+     </button>-->
 
     <div *ngIf="!editMode; else editModes">
       <table class="table table-striped table-bordered table-hover">
@@ -45,12 +66,14 @@
           <!--      <th class="">رنگ</th>-->
           <th class="">وضعیت</th>
           <th class="">عملیت</th>
+          <th class="">محتویات</th>
         </tr>
         </thead>
         <tbody class="table-responsive">
         <tr *ngFor="let entity of packages" [class]="selectedPackageId == entity.id ? 'selectedPackage' : ''">
           <td class="">
             <qrcode [qrdata]="entity.id"
+                    *ngIf="entity.id != undefined"
                     [errorCorrectionLevel]="'M'"
                     [colorLight]="'#00000000'"
                     [width]="150"
@@ -60,24 +83,64 @@
           </td>
           <!--      <td class=""> <input type="color" [value]="entity.color"></td>-->
           <td [class]="entity.status ? 'text-success' : 'text-danger'" class="fw-bold">
-            <i [class]="entity.status ? 'fa-box-open' : 'fa-box-close'" class="fa"></i>
+            <i [class]="entity.status ? 'fa-box-open' : 'fa-box-archive'" class="fa" [pTooltip]="entity.status ? 'بسته بندی باز است' : 'بسته بندی بسته است'"></i>
           </td>
           <td>
             <input type="radio"
-                   class="mx-1"
+                   class="mx-1 fa-bo x"
                    [value]="entity.isSelected"
                    (click)="selectPackage(entity)"
                    name="selectedPackage">
             <!--        <i class="pi pi-pencil circle mx-1" *ngIf="entity.id != selectedPackageId"></i>-->
-            <ng-container *ngIf="entity.id == selectedPackageId">
+            <ng-container *ngIf="entity.id != undefined && entity.id == selectedPackageId">
               <i class="pi pi-check mx-1" [pTooltip]="'اتمام بسته بندی'" [tooltipPosition]="'top'"
                  (click)="finishPackaging(entity)"></i>
               <i class="pi pi-times mx-1" [pTooltip]="'لغو بسته بندی'" [tooltipPosition]="'top'"
                  (click)="cancelPackaging(entity)"></i>
-              <input type="text" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)" #selectedWare>
-              <i class="fa fa-plus" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"></i>
+<!--              <input type="text" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"-->
+<!--                     #selectedWare>-->
+<!--              <i class="fa fa-plus" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"></i>-->
             </ng-container>
             <!--        <i class="fa fa-plus" [pTooltip]="'افزودن کالا به بسته بندی'"></i>-->
+          </td>
+          <td>
+            <!--          <td (click)="getPackageWarehouseInventory(entity.id)">-->
+            <p-button icon="pi pi-search"
+                      (click)="getPackageWarehouseInventory(entity.id); op.toggle($event)"></p-button>
+            <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+              <ng-template pTemplate>
+                <p-table [value]="packageWarehouseInventory" selectionMode="single" [(selection)]="selectedProduct"
+                         (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll">
+                  <ng-template pTemplate="header">
+                    <div class="row">
+                      <span class="col-4" pSortableColumn="name">نام
+                        <p-sortIcon field="name"></p-sortIcon>
+                      </span>
+                      <span class="col-4" pSortableColumn="wareType">گروه کالا
+                        <p-sortIcon field="wareType"></p-sortIcon>
+                      </span>
+                      <span class="col-4" pSortableColumn="wareUnit">واحد کالا
+                        <p-sortIcon field="wareUnit"></p-sortIcon>
+                      </span>
+                      <!--                      <span class="col-3" pSortableColumn="wareGroup">گروه کالا-->
+                      <!--                        <p-sortIcon field="price"></p-sortIcon>-->
+                      <!--                      </span>-->
+                    </div>
+                  </ng-template>
+                  <ng-template pTemplate="body" let-rowData let-packageWarehouseInventory>
+                    <div class="row" [pSelectableRow]="rowData">
+                      <span class="col-4">{{packageWarehouseInventory.warehouseInventory.ware.name}}</span>
+                      <span class="col-4">{{packageWarehouseInventory.warehouseInventory.ware.wareType.label}}</span>
+                      <span class="col-4">{{packageWarehouseInventory.warehouseInventory.ware.wareUnit.label}}</span>
+                      <!--                      <span>-->
+                      <!--                        <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{packageWarehouseInventory.image}}"-->
+                      <!--                               [alt]="packageWarehouseInventory.image" class="product-image"/>-->
+                      <!--                      </span>-->
+                    </div>
+                  </ng-template>
+                </p-table>
+              </ng-template>
+            </p-overlayPanel>
           </td>
         </tr>
         </tbody>

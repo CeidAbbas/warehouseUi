@@ -19,6 +19,9 @@ export class PackageService extends BaseService {
   getAllPackage(): Observable<Package[]> {
     return this.httpClient.get<Package[]>(`${this.packageUrl}/getAll`);
   }
+  getAllPackageWarehouseInventoryByPackage(packageId: string): Observable<Package[]> {
+    return this.httpClient.get<Package[]>(`${this.packageUrl}/getAll`);
+  }
 
   savePackage(packageEntry: Package): Observable<Package> {
     return this.httpClient.post<Package>(`${this.packageUrl}/save`, packageEntry);
@@ -27,4 +30,6 @@ export class PackageService extends BaseService {
   addWarehouseInventoryToPackage(packageWarehouseInventory: PackageWarehouseInventory): Observable<PackageWarehouseInventory> {
     return this.httpClient.post<PackageWarehouseInventory>(`${this.packageUrl}/savePackageWarehouseInventory`, packageWarehouseInventory);
   }
+
+
 }

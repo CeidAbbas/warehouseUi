@@ -20,8 +20,8 @@ export class WareEditComponent implements OnInit {
   @Input() public wareId: string = '';
   @Output() public editModeEmitter: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  treeNode: TreeNode[];
-  selectedFile: BaseInformation;
+  treeNode: TreeNode[] = [];
+  selectedFile?: BaseInformation;
   // selectedFile: TreeNode;
 
   // baseInformationComponent: BaseInformationComponent;
@@ -48,7 +48,9 @@ export class WareEditComponent implements OnInit {
 
   save() {
     console.log(this.selectedFile);
+    // @ts-ignore
     this.ware.typeTitle = this.selectedFile.label;
+    // @ts-ignore
     this.ware.typeId = this.selectedFile.id;
     console.log(this.ware);
     this.wareService.saveWare(this.ware).subscribe(ware => {
@@ -71,6 +73,7 @@ export class WareEditComponent implements OnInit {
     });
     this.wareService.getAllBaseInformation().subscribe(baseInformations => {
       this.wareTypes = baseInformations.filter(baseInformation => {
+        // @ts-ignore
         return baseInformation.hierarchy.search('002') === 0 && baseInformation.id !== 'f3f2644f-6fac-429b-b7cc-df1e2947b63e';
       });
       this.makeTreeJson(this.wareTypes);
@@ -84,7 +87,8 @@ export class WareEditComponent implements OnInit {
       return baseInformation.hierarchy < 1000000;
     });
     baseInformationHeaderFiltered.forEach((baseInformationHeader) => {
-      this.getChild(baseInformationHeader, baseInformations);
+      if (baseInformationHeader != undefined)
+        this.getChild(baseInformationHeader, baseInformations);
     });
     this.treeNode = baseInformationHeaderFiltered as TreeNode[];
   }
@@ -93,8 +97,10 @@ export class WareEditComponent implements OnInit {
     let baseInformationsTree: BaseInformation[] = [];
     baseInformationHeader.children = new Array<BaseInformation>();
     baseInformations.filter(baseInformation => {
+      // @ts-ignore
       if (baseInformation.hierarchy !== baseInformationHeader.hierarchy && baseInformation.hierarchy.search(baseInformationHeader.hierarchy) === 0 && (baseInformationHeader.hierarchy.length + 3) === baseInformation.hierarchy.length) {
         let bae = this.getChild(baseInformation, baseInformations);
+        // @ts-ignore
         baseInformationHeader.children.push(bae[0] as BaseInformation);
       }
     });

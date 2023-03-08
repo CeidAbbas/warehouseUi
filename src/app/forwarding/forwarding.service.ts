@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {BaseService} from "../general/service/base.service";
 import {Forwarding} from "./forwarding";
+import {ForwardingPackage} from "../forwardingPackge/forwardingPackage";
 
 @Injectable({
   providedIn: 'root'
@@ -29,5 +30,13 @@ export class ForwardingService extends BaseService {
 
   deleteForwarding(forwarding: Forwarding): Observable<any> {
     return this.httpClient.delete(`${this.forwardingUrl}/delete/${forwarding.id}`);
+  }
+
+  getForwardingPackage(forwardingId?: string): Observable<ForwardingPackage[]> {
+    return this.httpClient.get<ForwardingPackage[]>(`${this.forwardingUrl}/getForwardingPackage/${forwardingId}`);
+  }
+
+  addPackageToForwarding(forwardingPackage: ForwardingPackage): Observable<ForwardingPackage> {
+    return this.httpClient.post<ForwardingPackage>(`${this.forwardingUrl}/addPackageToForwarding`, forwardingPackage)
   }
 }

@@ -24,8 +24,8 @@ export class PackageWarehouseInventoryService extends BaseService {
   //   return this.httpClient.get<WarehouseInventory[]>(`${this.warehouseInventoryUrl}/getByWarehouseId/${warehouseId}`);
   // }
 
-  loadWarehouseInventory(packageWarehouseInventoryId: string): Observable<WarehouseInventory[]> {
-    return this.httpClient.get<WarehouseInventory[]>(`${this.packageWarehouseInventoryUrl}/load/${packageWarehouseInventoryId}`);
+  getPackageWarehouseInventory(packageWarehouseInventoryId: string): Observable<PackageWarehouseInventory[]> {
+    return this.httpClient.get<PackageWarehouseInventory[]>(`${this.packageWarehouseInventoryUrl}/load/${packageWarehouseInventoryId}`);
   }
 
   savePackageWarehouseInventory(packageWarehouseInventory: PackageWarehouseInventory[]): Observable<PackageWarehouseInventory[]> {

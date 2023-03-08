@@ -14,7 +14,7 @@ import {PackageWarehouseInventory} from "../packageWarehouseInventory/package-wa
 })
 export class WarehouseInventoryComponent implements OnInit {
 
-  public warehouseInventories?: WarehouseInventory[];
+  public warehouseInventories: WarehouseInventory[] = [];
   public warehouseInventoriesTemp: WarehouseInventory[] = [];
   public title = 'موجودی';
   public editMode = false;
@@ -22,11 +22,11 @@ export class WarehouseInventoryComponent implements OnInit {
   @Input() warehouseTitle = 'تمام انبارها';
   @Input() public warehouseId = '';
   @Input() originLocation = '';
-  @ViewChild('packageComponent') public packageComponent: PackageComponent;
-  public selectedWare;
-  public selectedPackageColor = '';
+  @ViewChild('packageComponent') public packageComponent?: PackageComponent;
+  public selectedWare: any;
+  public selectedPackageColor?: string = '';
   public selectedPackage?: Package;
-  public message: Message[];
+  public message: Message[] = [];
 
   constructor(
     private warehouseInventoryService: WarehouseInventoryService,
@@ -35,6 +35,7 @@ export class WarehouseInventoryComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.warehouseInventories = [];
     this.onLoad();
   }
 
@@ -59,6 +60,7 @@ export class WarehouseInventoryComponent implements OnInit {
 
   addToPackage() {
     let warehouseInventoryIds = [];
+    if (this.warehouseInventories != undefined)
     this.warehouseInventories.forEach((warehouseInventory) => {
       if (warehouseInventory.isSelected)
         warehouseInventoryIds.push(warehouseInventory.id);
@@ -71,11 +73,11 @@ export class WarehouseInventoryComponent implements OnInit {
   }
 
   finishedPackaging($event: Package) {
-    let selectedWarehouseInventory: WarehouseInventory[];
-    selectedWarehouseInventory = this.warehouseInventories.filter(warehouseInventory => {
+    let selectedWarehouseInventory: WarehouseInventory[] | undefined = [];
+    selectedWarehouseInventory = this.warehouseInventories?.filter(warehouseInventory => {
       return warehouseInventory.isSelected;
     });
-    if (selectedWarehouseInventory.length > 0) {
+    if (selectedWarehouseInventory != undefined && selectedWarehouseInventory.length > 0) {
       this.message = [{severity: 'info', summary: '', detail: 'به بسته بندی کالا اضافه کردید'}];
       setTimeout(() => {
           this.message = [];
@@ -86,7 +88,7 @@ export class WarehouseInventoryComponent implements OnInit {
       selectedWarehouseInventory.forEach(warehouseInventory => {
         entity = new PackageWarehouseInventory();
         entity.warehouseInventoryId = warehouseInventory.id;
-        entity.packageId = this.selectedPackage.id;
+        entity.packageId = this.selectedPackage?.id;
         packageWarehouseInventory.push(entity);
       });
       this.packageWarehouseInventoryService.savePackageWarehouseInventory(packageWarehouseInventory).subscribe(res => {
