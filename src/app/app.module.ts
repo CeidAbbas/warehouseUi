@@ -49,6 +49,7 @@ import {NgxScannerQrcodeModule} from "ngx-scanner-qrcode";
 import {WarehouseSearchComponent} from "./warehouse/warehouse-search.component";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {TableModule} from "primeng/table";
+import {NgPersianDatepickerModule} from "ng-persian-datepicker";
 // import {ZXingScannerModule} from "@zxing/ngx-scanner";
 
 
@@ -103,6 +104,8 @@ import {TableModule} from "primeng/table";
     MessagesModule,
     OverlayPanelModule,
     TableModule,
+    NgPersianDatepickerModule,
+    ReactiveFormsModule,
   ],
   providers: [
     DecimalPipe,

@@ -1,0 +1,1 @@
+{"ast":null,"code":"export class BaseModel {\n  constructor(id, createdDate, createdUser) {\n    this.id = id;\n    this.createdDate = createdDate;\n    this.createdUser = createdUser;\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}

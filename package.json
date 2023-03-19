@@ -24,6 +24,7 @@
     "bootstrap": "^5.2.3",
     "bootstrap-icons": "^1.10.3",
     "font-awesome": "^4.7.0",
+    "jalali-ts": "^2.0.4",
     "moment-jalaali": "^0.9.6",
     "ng-persian-datepicker": "^6.1.2",
     "ngx-scanner-qrcode": "^1.2.2",

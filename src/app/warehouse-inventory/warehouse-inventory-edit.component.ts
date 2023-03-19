@@ -6,6 +6,7 @@ import {Person} from "../person/person";
 import {PersonService} from "../person/person.service";
 import {WareService} from "../ware/ware.service";
 import {JalaliPipe} from "../general/utility/pipeTools/dateTimeTools/jalali-pipe";
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-warehouse-inventory-edit',
@@ -19,9 +20,10 @@ export class WarehouseInventoryEditComponent implements OnInit {
   public producers?: Person[];
   @Input() warehouseId?: string;
   @Output() public switchToGrid: EventEmitter<boolean> = new EventEmitter<boolean>();
-  expirationDate: any;
-  entryDate: any;
 
+  expirationDate = new FormControl();
+  entryDate = new FormControl();
+  dataValue = new FormControl();
 
   constructor(
     private warehouseInventoryService: WarehouseInventoryService,
@@ -41,10 +43,10 @@ export class WarehouseInventoryEditComponent implements OnInit {
   buttonClicked($event: string) {
     switch ($event) {
       case 'save':
-        this.warehouseInventory.entryDate = this.dateTransformer.transform(this.entryDate);
-        this.warehouseInventory.expirationDate = this.dateTransformer.transform(this.expirationDate);
-        this.save();
-
+        this.warehouseInventory.entryDate = this.entryDate.value;
+        this.warehouseInventory.expirationDate = this.expirationDate.value;
+        // this.save();
+        console.log(this.warehouseInventory);
         break;
       case 'reload':
         break;

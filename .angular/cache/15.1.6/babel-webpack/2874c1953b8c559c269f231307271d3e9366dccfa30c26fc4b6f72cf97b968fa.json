@@ -1,0 +1,1 @@
+{"ast":null,"code":"import { BaseModel } from '../general/model/base-model';\nexport class PackageWarehouseInventory extends BaseModel {\n  constructor(packageId, warehouseInventoryId) {\n    super();\n    this.packageId = packageId;\n    this.warehouseInventoryId = warehouseInventoryId;\n  }\n}","map":null,"metadata":{},"sourceType":"module","externalDependencies":[]}
