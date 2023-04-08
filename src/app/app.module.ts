@@ -31,8 +31,6 @@ import {TreeModule} from "primeng/tree";
 import {ContextMenuModule} from "primeng/contextmenu";
 import {ToastModule} from "primeng/toast";
 import {DecimalPipe} from '@angular/common';
-// import {DpDatePickerModule} from "ng2-jalali-date-picker";
-
 import {PackageComponent} from './package/package.component';
 import {PackageEditComponent} from './package/package-edit.component';
 import {TooltipModule} from "primeng/tooltip";
@@ -44,13 +42,14 @@ import {ForwardingEditComponent} from './forwarding/forwarding-edit.component';
 import {CeidSelectComponent} from './general/utility/input-tools/ceid-select/ceid-select.component';
 import {QRCodeModule} from "angularx-qrcode";
 import {JalaliPipe} from "./general/utility/pipeTools/dateTimeTools/jalali-pipe";
-import { ColorComponent } from './color/color.component';
+import {ColorComponent} from './color/color.component';
 import {NgxScannerQrcodeModule} from "ngx-scanner-qrcode";
 import {WarehouseSearchComponent} from "./warehouse/warehouse-search.component";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {TableModule} from "primeng/table";
 import {NgPersianDatepickerModule} from "ng-persian-datepicker";
-// import {ZXingScannerModule} from "@zxing/ngx-scanner";
+import {WarehouseInventoryShowImageComponent} from "./warehouse-inventory/warehouse-inventory-show-image.component";
+import {GalleriaModule} from "primeng/galleria";
 
 
 @NgModule({
@@ -86,6 +85,7 @@ import {NgPersianDatepickerModule} from "ng-persian-datepicker";
     JalaliPipe,
     WarehouseSearchComponent,
     ColorComponent,
+    WarehouseInventoryShowImageComponent,
   ],
   imports: [
     BrowserModule,
@@ -106,6 +106,7 @@ import {NgPersianDatepickerModule} from "ng-persian-datepicker";
     TableModule,
     NgPersianDatepickerModule,
     ReactiveFormsModule,
+    GalleriaModule,
   ],
   providers: [
     DecimalPipe,
