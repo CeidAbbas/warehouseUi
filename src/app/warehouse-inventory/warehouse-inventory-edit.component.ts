@@ -7,6 +7,7 @@ import {PersonService} from "../person/person.service";
 import {WareService} from "../ware/ware.service";
 import {JalaliPipe} from "../general/utility/pipeTools/dateTimeTools/jalali-pipe";
 import { FormControl } from '@angular/forms';
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-warehouse-inventory-edit',
@@ -24,16 +25,21 @@ export class WarehouseInventoryEditComponent implements OnInit {
   expirationDate = new FormControl();
   entryDate = new FormControl();
   dataValue = new FormControl();
-
+  selectedFile?: File;
+  retrievedImage: any;
+  base64Data: any;
+  retrieveResonse: any;
   constructor(
     private warehouseInventoryService: WarehouseInventoryService,
     private personService: PersonService,
     private wareService: WareService,
     private dateTransformer: JalaliPipe,
+    private httpClient: HttpClient,
   ) {
   }
 
   ngOnInit(): void {
+    this.getImage();
     this.warehouseInventory.warehouseId = this.warehouseId;
     this.warehouseInventory.color = '#e66465';
     this.loadProducers();
@@ -45,7 +51,8 @@ export class WarehouseInventoryEditComponent implements OnInit {
       case 'save':
         this.warehouseInventory.entryDate = this.entryDate.value;
         this.warehouseInventory.expirationDate = this.expirationDate.value;
-        // this.save();
+        this.uploadFile();
+        this.save();
         console.log(this.warehouseInventory);
         break;
       case 'reload':
@@ -63,7 +70,13 @@ export class WarehouseInventoryEditComponent implements OnInit {
   }
 
   private save() {
-    this.warehouseInventoryService.saveWarehouseInventory(this.warehouseInventory).subscribe(warehouseInventory => {
+    const file = new FormData();
+    if (this.selectedFile) {
+      file.append('file', this.selectedFile);
+      // file.append('file', this.selectedFile, this.selectedFile.name);
+    }
+
+    this.warehouseInventoryService.saveWarehouseInventory(this.warehouseInventory, file).subscribe(warehouseInventory => {
       this.switchToGrid.emit(true);
     });
   }
@@ -72,5 +85,28 @@ export class WarehouseInventoryEditComponent implements OnInit {
     this.wareService.getAllWare().subscribe(wares => {
       this.wares = wares;
     });
+  }
+
+  selectFile(event: any) {
+    if (event.target != null && event.target.files != null)
+      this.selectedFile = event.target.files.item(0);
+  }
+
+  private uploadFile() {
+    // if (this.selectedFile) {
+    //   const file: File | null = this.selectedFile.item(0);
+    //   if (file) {
+    //     this.currentFile = file;
+        // this.warehouseInventory.warehouseInventoryFile = file;
+      // }
+    // }
+  }
+
+  getImage() {
+  //   this.warehouseInventoryService.getImage().subscribe(result => {
+  //     this.retrieveResonse = result;
+  //     this.base64Data = this.retrieveResonse.file;
+  //     this.retrievedImage = 'data:image/jpeg;base64,' + this.base64Data;
+  //   })
   }
 }

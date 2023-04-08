@@ -27,12 +27,22 @@ export class WarehouseInventoryService extends BaseService {
     return this.httpClient.get<WarehouseInventory[]>(`${this.warehouseInventoryUrl}/load/${warehouseInventoryId}`);
   }
 
-  saveWarehouseInventory(warehouseInventory: WarehouseInventory): Observable<Object> {
-    return this.httpClient.post<Object>(`${this.warehouseInventoryUrl}/save`, warehouseInventory);
+  saveWarehouseInventory(warehouseInventory: WarehouseInventory, file?: FormData): Observable<WarehouseInventory> {
+    return this.httpClient.post<WarehouseInventory>(`${this.warehouseInventoryUrl}/save`, file);
+  }
+
+  // @ts-ignore
+  saveWarehouseInventoryFile(file?: FormData, warehouseInventory: WarehouseInventory): Observable<WarehouseInventory> {
+    console.log(file);
+    console.log(warehouseInventory);
+    return this.httpClient.post<WarehouseInventory>(`${this.warehouseInventoryUrl}/saveFile/${warehouseInventory.id}`, file);
   }
 
   deleteWarehouseInventory(warehouseInventory: WarehouseInventory): Observable<any> {
     return this.httpClient.delete(`${this.warehouseInventoryUrl}/delete/${warehouseInventory.id}`);
   }
 
+  getImage(warehouseInventoryId: string) {
+    return this.httpClient.get<any[]>(`${this.warehouseInventoryUrl}/getImage/${warehouseInventoryId}`);
+  }
 }

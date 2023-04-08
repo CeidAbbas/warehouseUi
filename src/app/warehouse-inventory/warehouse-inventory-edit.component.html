@@ -16,9 +16,15 @@
                 value="{{ producer.id }}">{{ producer.firstName }} {{ producer.lastName }}</option>
       </select>
     </div>
-    <div class="col-6 col-sm-6">
+    <div class="col-3 col-sm-3">
       <label class="control-label">سریال</label>
       <input type="text" class="form-control" [(ngModel)]="warehouseInventory.serial">
+    </div>
+    <div class="col-3 col-sm-3">
+      <label class="control-label">تصاویر</label>
+      <form enctype="multipart/form-data">
+      <input type="file" class="form-control" (change)="selectFile($event)">
+      </form>
     </div>
     <div class="col-3 col-sm-3">
       <label class="control-label">شماره قرارداد</label>
@@ -109,6 +115,7 @@
     </div>
     <div class="col-6 col-sm-6"></div>
     <div class="col-6 col-sm-6"></div>
+  <img [src]="retrievedImage" alt="">
     <app-operation-bottom
       (buttonEmitter)="buttonClicked($event)"
     ></app-operation-bottom>

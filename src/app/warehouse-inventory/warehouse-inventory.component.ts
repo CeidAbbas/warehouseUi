@@ -27,6 +27,11 @@ export class WarehouseInventoryComponent implements OnInit {
   public selectedPackageColor?: string = '';
   public selectedPackage?: Package;
   public message: Message[] = [];
+  selectedFile?: File;
+  showImage: boolean = false;
+  retrievedImages: any[] = [];
+  base64Data: any;
+  retrieveResonse: any;
 
   constructor(
     private warehouseInventoryService: WarehouseInventoryService,
@@ -102,6 +107,40 @@ export class WarehouseInventoryComponent implements OnInit {
       //     this.message = [];
       //   }, 3000
       // );
+    }
+  }
+
+
+  selectFile(event: any) {
+    if (event.target != null && event.target.files != null)
+      this.selectedFile = event.target.files.item(0);
+  }
+
+  getImage(warehouseInventory: WarehouseInventory) {
+    console.log(warehouseInventory);
+    this.retrievedImages = [];
+    if (warehouseInventory.id != undefined) {
+    this.warehouseInventoryService.getImage(warehouseInventory.id).subscribe(results => {
+      console.log(results);
+      results.forEach(result => {
+      this.retrieveResonse = result;
+      this.base64Data = this.retrieveResonse.file;
+      this.retrievedImages.push('data:image/jpeg;base64,' + this.base64Data);
+      });
+    });
+    }
+  }
+
+  uploadFile(warehouseInventory: WarehouseInventory) {
+    const file = new FormData();
+    if (this.selectedFile) {
+      file.append('file', this.selectedFile, this.selectedFile.name);
+      if (warehouseInventory.id != undefined)
+        // file.append('warehouseInventoryId', warehouseInventory.id);
+      this.warehouseInventoryService.saveWarehouseInventoryFile(file, warehouseInventory).subscribe(result => {
+        console.log(result);
+        this.getImage(warehouseInventory);
+      });
     }
   }
 }

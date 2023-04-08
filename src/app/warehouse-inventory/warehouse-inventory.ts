@@ -6,6 +6,7 @@ export class WarehouseInventory extends BaseModel {
     public warehouseTitle?: string,
     public warehouseDestinationId?: string,
     public warehouseDestinationTitle?: string,
+    public warehouseInventoryFile?: File,
     public wareId?: string,
     public wareName?: string,
     public producerId?: string,

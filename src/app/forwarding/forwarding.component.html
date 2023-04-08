@@ -95,17 +95,11 @@
                   <ng-template pTemplate="header">
                     <div class="row">
                       <span class="col-4" pSortableColumn="name">رمزینه بسته بندی
-                        <p-sortIcon field="name"></p-sortIcon>
+<!--                        <p-sortIcon field="name"></p-sortIcon>-->
                       </span>
-<!--                      <span class="col-4" pSortableColumn="wareType">گروه کالا-->
-<!--                        <p-sortIcon field="wareType"></p-sortIcon>-->
-<!--                      </span>-->
-<!--                      <span class="col-4" pSortableColumn="wareUnit">واحد کالا-->
-<!--                        <p-sortIcon field="wareUnit"></p-sortIcon>-->
-<!--                      </span>-->
-                      <!--                      <span class="col-3" pSortableColumn="wareGroup">گروه کالا-->
-                      <!--                        <p-sortIcon field="price"></p-sortIcon>-->
-                      <!--                      </span>-->
+                      <span class="col-4" pSortableColumn="name">محتویات
+<!--                        <p-sortIcon field="name"></p-sortIcon>-->
+                      </span>
                     </div>
                   </ng-template>
                   <ng-template pTemplate="body" let-rowData let-forwardingPackage>
@@ -117,15 +111,16 @@
                               [colorLight]="'#ffffffff'"
                               [width]="150"
                               style=""
-                              [cssClass]="'bordered'"
+                              class="col-4"
+                              [cssClass]="'bordered col-4'"
                       ></qrcode>
-<!--                      <span class="col-4">{{forwardingPackage.warehouseInventory.ware.wareType.label}}</span>-->
-<!--                      <span class="col-4">{{forwardingPackage.warehouseInventory.ware.wareUnit.label}}</span>-->
+                    <span  class="col-4">a</span>
                       <!--                      <span>-->
                       <!--                        <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{packageWarehouseInventory.image}}"-->
                       <!--                               [alt]="packageWarehouseInventory.image" class="product-image"/>-->
                       <!--                      </span>-->
                     </div>
+<!--                    <div class=""-->
                   </ng-template>
                 </p-table>
               </ng-template>

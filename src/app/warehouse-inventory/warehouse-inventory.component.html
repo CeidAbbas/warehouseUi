@@ -34,7 +34,7 @@
           <td> {{ warehouseInventory.wareName }}</td>
           <td> {{ warehouseInventory.warehouseTitle }}</td>
           <!--          <td> {{ warehouseInventory.inventory }}</td>-->
-                    <td> {{ warehouseInventory.serial }}</td>
+          <td> {{ warehouseInventory.serial }}</td>
           <td> {{ warehouseInventory.expirationDate ? warehouseInventory.expirationDate : 'ندارد' }}</td>
           <td>
             <qrcode [qrdata]="warehouseInventory.id"
@@ -55,6 +55,25 @@
                (click)="openPackage()"
                *ngIf="originLocation == 'export' && !showPackages"></i>
             <i class="pi pi-info-circle text-info fw-bold fs-5 mx-1"></i>
+            <p-overlayPanel #op [style]="{ 'width': '90%'}">
+              <div class="row">
+                <div class="col-12 mb-3">
+                  <i class="pi pi-plus me-4" (click)="uploadFile(warehouseInventory)" [pTooltip]="'افزودن فایل'" [tooltipPosition]="'left'"></i>
+                  <form enctype="multipart/form-data" style="display: inline-block">
+                    <input type="file" class="form-control" (change)="selectFile($event)">
+                  </form>
+                </div>
+                <div class="col-12">
+                  <div class="row">
+                    <span *ngFor="let retrievedImage of retrievedImages" class="col-3 p-2">
+                      <img [src]="retrievedImage" alt="" width="100%" height="100%" class="">
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </p-overlayPanel>
+            <i class="pi pi-image fs-5 mx-1"
+               (click)="showImage = !showImage;getImage(warehouseInventory);op.toggle($event)"></i>
           </td>
         </tr>
         </tbody>
@@ -85,6 +104,9 @@
       <!--        ></app-warehouse-inventory-edit>-->
       <!--      </div>-->
     </article>
+    <!--    <app-warehouse-inventory-show-image-->
+    <!--      *ngIf="showImage"-->
+    <!--    ></app-warehouse-inventory-show-image>-->
   </div>
 </div>
 
