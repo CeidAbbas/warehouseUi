@@ -1,4 +1,5 @@
 import {BaseModel} from '../general/model/base-model';
+import {Ware} from "../ware/ware";
 
 export class WarehouseInventory extends BaseModel {
   constructor(
@@ -7,6 +8,7 @@ export class WarehouseInventory extends BaseModel {
     public warehouseDestinationId?: string,
     public warehouseDestinationTitle?: string,
     public warehouseInventoryFile?: File,
+    public ware?: Ware,
     public wareId?: string,
     public wareName?: string,
     public producerId?: string,

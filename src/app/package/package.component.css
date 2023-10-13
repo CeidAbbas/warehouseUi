@@ -1,3 +1,18 @@
 .selectedPackage {
   background-color: darkgray;
 }
+/*@media print*/
+/*{*/
+/*  @page*/
+/*  {*/
+/*    size: 3.5in 5.5in ;*/
+/*    size: landscape;*/
+  /*}*/
+/*}*/
+
+/*@media print and (width: 21cm) and (height: 29.7cm) {*/
+/*@media print {*/
+/*  @page  {*/
+/*    size: A4 landscape;*/
+/*  }*/
+/*}*/

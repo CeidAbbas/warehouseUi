@@ -56,8 +56,6 @@ export class BaseInformationEditComponent implements OnInit, AfterViewInit {
 
   showAddNode(file: any, mode: string) {
     this.colorMode = false;
-    console.log(file);
-    console.log(mode);
     this.baseInformation = file as BaseInformation;
     let hierarchy: string;
     this.parent = this.baseInformation.id as string;

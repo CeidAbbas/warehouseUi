@@ -33,8 +33,6 @@ export class WarehouseInventoryService extends BaseService {
 
   // @ts-ignore
   saveWarehouseInventoryFile(file?: FormData, warehouseInventory: WarehouseInventory): Observable<WarehouseInventory> {
-    console.log(file);
-    console.log(warehouseInventory);
     return this.httpClient.post<WarehouseInventory>(`${this.warehouseInventoryUrl}/saveFile/${warehouseInventory.id}`, file);
   }
 

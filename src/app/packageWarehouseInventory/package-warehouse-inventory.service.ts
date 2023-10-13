@@ -29,8 +29,6 @@ export class PackageWarehouseInventoryService extends BaseService {
   }
 
   savePackageWarehouseInventory(packageWarehouseInventory: PackageWarehouseInventory[]): Observable<PackageWarehouseInventory[]> {
-    console.log('packageWarehouseInventory');
-    console.log(packageWarehouseInventory);
     return this.httpClient.post<PackageWarehouseInventory[]>(`${this.packageWarehouseInventoryUrl}/save`, packageWarehouseInventory);
   }
 

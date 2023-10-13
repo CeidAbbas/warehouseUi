@@ -9,6 +9,9 @@ import {
   ScannerQRCodeSelectedFiles
 } from "ngx-scanner-qrcode";
 import {ForwardingPackage} from "../forwardingPackge/forwardingPackage";
+import {PackageService} from "../package/package.service";
+import {PackageWarehouseInventory} from "../packageWarehouseInventory/package-warehouse-inventory";
+import {WarehouseInventory} from "../warehouse-inventory/warehouse-inventory";
 
 @Component({
   selector: 'app-forwarding',
@@ -19,6 +22,7 @@ export class ForwardingComponent implements OnInit {
   forwardings: Forwarding[] = [];
   editMode = false;
   title: string = '';
+  isCameraFree = false;
   forwardingTitle = 'ارسال بسته بندی';
   editModeTitle = 'ثبت ارسال بسته بندی';
   editLoadId: any;
@@ -43,12 +47,16 @@ export class ForwardingComponent implements OnInit {
   public qrCodeResult: ScannerQRCodeSelectedFiles[] = [];
   public qrCodeResult2: ScannerQRCodeSelectedFiles[] = [];
   @ViewChild('action') action: NgxScannerQrcodeComponent = new NgxScannerQrcodeComponent();
-  forwardingPackage: ForwardingPackage[] = [];
+  @ViewChild('op2') op2: any;
+  forwardingPackages: ForwardingPackage[] = [];
+  warehouseInventories: any[] = [];
   selectedProduct: any;
+  isCameraSearch: boolean = false;
 
   constructor(
     private qrCode: NgxScannerQrcodeService,
     private forwardingService: ForwardingService,
+    private packageService: PackageService,
   ) {
   }
 
@@ -63,7 +71,6 @@ export class ForwardingComponent implements OnInit {
   }
 
   switchToEditMode(id?: any) {
-    console.log(id);
   }
 
   editModeBack($event: boolean) {
@@ -85,26 +92,24 @@ export class ForwardingComponent implements OnInit {
   public onEvent(e: ScannerQRCodeResult[]): void {
     if (e.length > 0 && this.selectedPackageId != e[0].value && this.selectedForwarding != null) {
       this.selectedPackageId = e[0].value;
-      console.log(this.selectedPackageId);
-      // if (this.sendToPackage && this.selectedPackageId != '') {
+      if (this.isCameraSearch)
+        this.forwardingService.loadForwarding(this.selectedPackageId).subscribe(result => {
+          this.forwardings = [];
+          this.forwardings.push(result);
+        });
+      else
         this.addPackageToForwarding(this.selectedPackageId, this.selectedForwarding);
-        // this.sendToPackage = false;
-      }
-      // this.action.stop();
     }
+  }
 
   private addPackageToForwarding(selectedPackageId: string, selectedForwarding: string) {
     let forwardingPackage: ForwardingPackage = {
-      forwardingId : selectedForwarding,
-      packageId : selectedPackageId
+      forwardingId: selectedForwarding,
+      packageId: selectedPackageId
     }
-    console.log(selectedForwarding);
-    console.log(selectedPackageId);
-    console.log(forwardingPackage);
     this.forwardingService.addPackageToForwarding(forwardingPackage).subscribe(result => {
-
     });
-}
+  }
 
   public handle(action: any, fn: string): void {
     action[fn]().subscribe(console.log, alert);
@@ -127,21 +132,31 @@ export class ForwardingComponent implements OnInit {
   }
 
   selectForwarding(forwardingId: string = '') {
-    console.log(forwardingId);
     this.selectedForwarding = forwardingId;
-    if (this.action != undefined) { // @ts-ignore
-      setTimeout(() => this.action.start(), 1000);
-    }
+    this.isCameraSearch = false;
+    this.isCameraFree = true;
   }
 
   getForwardingPackage(forwardingId?: string) {
     this.forwardingService.getForwardingPackage(forwardingId).subscribe(value => {
-      console.log(value);
-      this.forwardingPackage = value;
+      this.forwardingPackages = value;
     });
   }
 
   onRowSelect($event: any) {
 
+  }
+
+  cameraSearch() {
+    this.selectedForwarding = '';
+    this.isCameraSearch = true;
+    this.isCameraFree = true;
+  }
+
+  showDetails(packageId: string, $event: any) {
+    this.packageService.getAllPackageWarehouseInventoryByPackage(packageId).subscribe(result => {
+      this.warehouseInventories = result;
+      this.op2.toggle($event);
+    });
   }
 }

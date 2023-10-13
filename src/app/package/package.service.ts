@@ -4,6 +4,7 @@ import {HttpClient} from "@angular/common/http";
 import { Package } from './package';
 import {Observable} from "rxjs";
 import {PackageWarehouseInventory} from "../packageWarehouseInventory/package-warehouse-inventory";
+import {WarehouseInventory} from "../warehouse-inventory/warehouse-inventory";
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,13 @@ export class PackageService extends BaseService {
   getAllPackage(): Observable<Package[]> {
     return this.httpClient.get<Package[]>(`${this.packageUrl}/getAll`);
   }
-  getAllPackageWarehouseInventoryByPackage(packageId: string): Observable<Package[]> {
-    return this.httpClient.get<Package[]>(`${this.packageUrl}/getAll`);
+
+  loadPackage(packageId: string): Observable<Package> {
+    return this.httpClient.get<Package>(`${this.packageUrl}/load/${packageId}`);
+  }
+
+  getAllPackageWarehouseInventoryByPackage(packageId: string): Observable<WarehouseInventory[]> {
+    return this.httpClient.get<WarehouseInventory[]>(`${this.packageUrl}/getAllWarehouseInventory/${packageId}`);
   }
 
   savePackage(packageEntry: Package): Observable<Package> {

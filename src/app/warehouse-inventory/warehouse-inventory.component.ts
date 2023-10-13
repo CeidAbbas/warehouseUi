@@ -117,11 +117,9 @@ export class WarehouseInventoryComponent implements OnInit {
   }
 
   getImage(warehouseInventory: WarehouseInventory) {
-    console.log(warehouseInventory);
     this.retrievedImages = [];
     if (warehouseInventory.id != undefined) {
     this.warehouseInventoryService.getImage(warehouseInventory.id).subscribe(results => {
-      console.log(results);
       results.forEach(result => {
       this.retrieveResonse = result;
       this.base64Data = this.retrieveResonse.file;
@@ -138,7 +136,6 @@ export class WarehouseInventoryComponent implements OnInit {
       if (warehouseInventory.id != undefined)
         // file.append('warehouseInventoryId', warehouseInventory.id);
       this.warehouseInventoryService.saveWarehouseInventoryFile(file, warehouseInventory).subscribe(result => {
-        console.log(result);
         this.getImage(warehouseInventory);
       });
     }

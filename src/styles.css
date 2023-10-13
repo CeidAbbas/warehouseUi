@@ -1,1 +1,24 @@
 /* You can add global styles to this file, and also import other style files */
+@import '~ngx-print-element/styles.css';
+@media print {
+  #ngx-print-element,
+  #ngx-print-element * {
+    visibility: visible;
+  }
+  #ngx-print-element {
+    /*direction: rtl;*/
+    position: absolute;
+    left: 150px;
+    top: 10px;
+    size: 3cm 7cm;
+  }
+
+  @page {
+    size: 3cm 7cm;
+  }
+
+  .print-none {
+    display: none;
+  }
+}
+

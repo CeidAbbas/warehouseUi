@@ -126,7 +126,6 @@ export class WarehouseComponent implements OnInit {
     this.searchMode = !this.searchMode;
   }
   searchConfig(vent: Warehouse | undefined | any) {
-    console.log(vent);
     this.warehouseSearchModel = vent;
     this.searchMode = false;
     this.warehouseService.getAllWarehouses().subscribe(warehouses => {

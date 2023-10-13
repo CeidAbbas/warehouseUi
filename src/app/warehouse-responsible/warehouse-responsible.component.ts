@@ -32,13 +32,11 @@ export class WarehouseResponsibleComponent implements OnInit {
     if (!this.editMode)
     this.warehouseResponsibleService.getAllWarehouseResponsible().subscribe(warehouseResponsible => {
       this.warehouseResponsibles = warehouseResponsible;
-      console.log(warehouseResponsible);
     });
   }
 
   reload(): void {
     if (this.editMode) {
-      console.log('if');
     } else {
       this.onload();
     }
@@ -52,7 +50,6 @@ export class WarehouseResponsibleComponent implements OnInit {
 
   deleteWarehouseResponsible(warehouseResponsible: WarehouseResponsible) {
     this.warehouseResponsibleService.deleteWarehouseResponsible(warehouseResponsible).subscribe(data => {
-      console.log(data);
     });
   }
 

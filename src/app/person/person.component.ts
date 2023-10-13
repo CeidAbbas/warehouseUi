@@ -31,13 +31,11 @@ export class PersonComponent implements OnInit {
   onLoad() {
     this.personService.getAllPerson().subscribe(persons => {
       this.persons = persons;
-      console.log(persons);
     });
   }
 
   reload(): void {
     if (this.editMode) {
-      console.log('if');
     } else {
       this.onLoad();
     }
@@ -51,7 +49,6 @@ export class PersonComponent implements OnInit {
 
   deletePerson(person: Person) {
     this.personService.deletePerson(person).subscribe(data => {
-      console.log(data);
     })
   }
 

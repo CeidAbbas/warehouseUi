@@ -66,7 +66,6 @@ export class WarehouseEditComponent implements OnInit {
 
   // tslint:disable-next-line:typedef
   showHideLoader() {
-    console.log('show');
     // this.jqxLoader.open();
     // this.showHideLoaderFlag ? this.jqxLoader?.open() : this.jqxLoader?.close();
   }

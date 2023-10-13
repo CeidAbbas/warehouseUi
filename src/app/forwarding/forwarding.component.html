@@ -35,8 +35,8 @@
           <!--    &lt;!&ndash; start/stop &ndash;&gt;-->
           <button class="btn" [class.btn-info]="!action.isStart"
                   [class.btn-warning]="action.isStart"
-                  [pTooltip]="action.isStart ? '' : 'توقف خوانش'"
-                  [disabled]="action.isLoading || !action.isStart"
+                  [pTooltip]="!action.isStart ? 'خوانش' : 'توقف خوانش'"
+                  [disabled]="action.isLoading ||!isCameraFree"
                   (click)="handle(action, action.isStart ? 'stop' : 'start')">
             <i class="bi fw-bold" [class]="action.isStart ? 'bi-camera-video-off' : 'bi-camera-video'"></i>
           </button>
@@ -53,27 +53,26 @@
       <table class="table table-bordered table-striped table-hover"
              *ngIf="!editMode && forwardings.length > 0">
         <thead>
-        <tr class>
+        <tr [class]="isCameraSearch ? 'bg-secondary' : ''">
+          <th><input type="radio" (click)="cameraSearch()" [value]="isCameraSearch" name="forwarding"></th>
+          <th>رمزینه</th>
           <th>حمل کننده</th>
           <th>تحویل گیرنده</th>
-          <th>رمزینه</th>
           <th>وسیله حمل و نقل</th>
           <th>تاریخ ارسال</th>
           <th>تاریخ تحویل</th>
-          <th>انتخاب</th>
           <th>محتویات</th>
         </tr>
         </thead>
         <tbody>
         <tr class="" *ngFor="let forwarding of forwardings"
             (dblclick)="switchToEditMode(forwarding)"
+            [class]="selectedForwarding == forwarding.id ? 'bg-secondary' : ''"
         >
-          <td> {{ forwarding.transporterFullName }}</td>
-          <td> {{ forwarding.receiverFullName }}</td>
-          <!--          <td [style]="'background-color:' + forwarding.packagesColor + ';'"></td>-->
+          <td><input type="radio" (click)="selectForwarding(forwarding.id)" value="false" name="forwarding"></td>
           <td class="p-0">
-            <qrcode [qrdata]="forwarding.packagesId"
-                    *ngIf="forwarding.packagesId != undefined"
+            <qrcode [qrdata]="forwarding.id"
+                    *ngIf="forwarding.id != undefined"
                     [errorCorrectionLevel]="'M'"
                     [colorLight]="'#00000000'"
                     [width]="150"
@@ -81,30 +80,31 @@
                     [cssClass]="'bordered'"
             ></qrcode>
           </td>
+          <td> {{ forwarding.transporterFullName }}</td>
+          <td> {{ forwarding.receiverFullName }}</td>
           <td> {{ forwarding.carrierTitle }}</td>
           <td> {{ forwarding.transportDate }}</td>
           <td> {{ forwarding.receiveDate }}</td>
-          <td><input type="radio" (click)="selectForwarding(forwarding.id)" value="false" name="forwarding"></td>
           <td>
             <p-button icon="pi pi-search"
                       (click)="getForwardingPackage(forwarding.id); op.toggle($event)"></p-button>
             <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
               <ng-template pTemplate>
-                <p-table [value]="forwardingPackage" selectionMode="single" [(selection)]="selectedProduct"
+                <p-table [value]="forwardingPackages" selectionMode="single" [(selection)]="selectedProduct"
                          (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll">
                   <ng-template pTemplate="header">
                     <div class="row">
                       <span class="col-4" pSortableColumn="name">رمزینه بسته بندی
-<!--                        <p-sortIcon field="name"></p-sortIcon>-->
+                        <!--                        <p-sortIcon field="name"></p-sortIcon>-->
                       </span>
-                      <span class="col-4" pSortableColumn="name">محتویات
-<!--                        <p-sortIcon field="name"></p-sortIcon>-->
+                      <span class="col-4" pSortableColumn="name">جزئیات
+                        <!--                        <p-sortIcon field="name"></p-sortIcon>-->
                       </span>
                     </div>
                   </ng-template>
                   <ng-template pTemplate="body" let-rowData let-forwardingPackage>
                     <div class="row" [pSelectableRow]="rowData">
-<!--                      <span class="col-4">{{forwardingPackage.packages.id}}</span>-->
+                      <!--                      <span class="col-4">{{forwardingPackage.packages.id}}</span>-->
                       <qrcode [qrdata]="forwardingPackage.packages.id"
                               *ngIf="forwardingPackage.packages.id != undefined"
                               [errorCorrectionLevel]="'M'"
@@ -114,15 +114,34 @@
                               class="col-4"
                               [cssClass]="'bordered col-4'"
                       ></qrcode>
-                    <span  class="col-4">a</span>
+                      <span class="col-4 p-3"
+                            (click)="showDetails(forwardingPackage.packages.id, $event)">نمایش جزئیات</span>
                       <!--                      <span>-->
                       <!--                        <img src="https://primefaces.org/cdn/primeng/images/demo/product/{{packageWarehouseInventory.image}}"-->
                       <!--                               [alt]="packageWarehouseInventory.image" class="product-image"/>-->
                       <!--                      </span>-->
                     </div>
-<!--                    <div class=""-->
+                    <!--                    <div class=""-->
                   </ng-template>
                 </p-table>
+              </ng-template>
+            </p-overlayPanel>
+            <p-overlayPanel #op2 [showCloseIcon]="true" [style]="{width: '450px'}">
+              <ng-template pTemplate>
+                <table>
+                  <tr>
+                    <th>نام کالا</th>
+                    <th>نوع کالا</th>
+                    <th>توضیحات</th>
+                    <th>متعلقات</th>
+                  </tr>
+                  <tr *ngFor="let warehouseInventory of warehouseInventories">
+                    <td>{{warehouseInventory.ware.name}}</td>
+                    <td>{{warehouseInventory.ware.wareType.label}}</td>
+                    <td>{{warehouseInventory.description}}</td>
+                    <td>{{warehouseInventory.appurtenance}}</td>
+                  </tr>
+                </table>
               </ng-template>
             </p-overlayPanel>
           </td>

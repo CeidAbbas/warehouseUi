@@ -51,6 +51,8 @@ export class PackageComponent implements OnInit, AfterContentInit {
   public sendToPackage = true;
   packageWarehouseInventory: PackageWarehouseInventory[] = [];
   selectedProduct: any;
+  isCameraSearch: boolean = false;
+  isCameraFree: boolean = false;
 
   constructor(
     private qrcode: NgxScannerQrcodeService,
@@ -69,8 +71,13 @@ export class PackageComponent implements OnInit, AfterContentInit {
   public onEvent(e: ScannerQRCodeResult[]): void {
     if (e.length > 0 && this.selectedPackageWarehouseInventoryId != e[0].value) {
       this.selectedPackageWarehouseInventoryId = e[0].value;
-      console.log(this.selectedPackageWarehouseInventoryId);
-      if (this.sendToPackage && this.selectedPackageId != '') {
+      if (this.isCameraSearch) {
+        // this.packageWarehouseInventoryService.getPackageWarehouseInventory(this.selectedPackageWarehouseInventoryId).subscribe(result => {
+        this.packageService.loadPackage(this.selectedPackageWarehouseInventoryId).subscribe(result => {
+          this.packages = [];
+          this.packages.push(result);
+        });
+      } else if (this.sendToPackage && this.selectedPackageId != '') {
         this.addWarehouseInventoryToPackage(this.selectedPackageId, this.selectedPackageWarehouseInventoryId);
         this.sendToPackage = false;
       }
@@ -94,7 +101,6 @@ export class PackageComponent implements OnInit, AfterContentInit {
 
   public onSelects2(files: any): void {
     this.qrcode.loadFilesToScan(files, this.config).subscribe((res: ScannerQRCodeSelectedFiles[]) => {
-      console.log(res);
       this.qrCodeResult2 = res;
     });
   }
@@ -106,7 +112,6 @@ export class PackageComponent implements OnInit, AfterContentInit {
   getPackageWarehouseInventory(packageWarehouseInventoryId: string = ''): void {
     this.packageWarehouseInventoryService.getPackageWarehouseInventory(packageWarehouseInventoryId).subscribe(value => {
       this.packageWarehouseInventory = value;
-      console.log(this.packageWarehouseInventory);
     });
   }
 
@@ -121,14 +126,16 @@ export class PackageComponent implements OnInit, AfterContentInit {
   }
 
   selectPackage(entity: Package) {
-    entity.isSelected = true;
+    // entity.isSelected = true;
     if (entity.id != undefined) {
       this.selectedPackageId = entity.id;
     }
-    this.selectedPackage.emit(entity);
-    if (this.action != undefined) { // @ts-ignore
-      setTimeout(() => this.action.start(), 1000);
-    }
+    this.isCameraSearch = false;
+    this.isCameraFree = true;
+    // this.selectedPackage.emit(entity);
+    // if (this.action != undefined) { // @ts-ignore
+    //   setTimeout(() => this.action.start(), 1000);
+    // }
   }
 
   cancelPackaging(entity: Package) {
@@ -172,15 +179,43 @@ export class PackageComponent implements OnInit, AfterContentInit {
       warehouseInventoryId: warehouseInventoryId
     }
     this.packageService.addWarehouseInventoryToPackage(packageWarehouseInventory).subscribe(result => {
-      console.log(result);
       this.sendToPackage = false;
     }, error => {
-      console.log(error);
       this.sendToPackage = true;
     });
   }
 
   onRowSelect($event: any) {
 
+  }
+
+  cameraSearch() {
+    this.selectedPackageId = '';
+    this.isCameraSearch = true;
+    this.isCameraFree = true;
+  }
+
+  getPackages() {
+    this.packageService.getAllPackage().subscribe(results => {
+      this.packages = results;
+    })
+  }
+
+  printQrCode() {
+
+  }
+
+  public printConfig = {
+    printMode: 'template',
+    popupProperties: 'toolbar=yes,scrollbars=yes,resizable=yes,top=330,left=520,fullscreen=yes',
+    pageTitle: '',
+    templateString: '<header class="print-none">I\'m part of the template header</header>{{printBody}}<footer class="print-none">I\'m part of the template footer</footer>',
+    stylesheets: [{rel: 'stylesheet', href: 'https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css'}],
+    styles: [
+      'td { border: 1px solid black; color: green; }',
+      'table { border: 1px solid black; }',
+      'header, table, footer { margin: auto; text-align: center; }',
+      'header {font-weight: bold}',
+    ]
   }
 }

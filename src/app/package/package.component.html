@@ -1,6 +1,9 @@
 <div class="m-3 p-2">
   <div class="bg-light">
-    <i class="fa fa-plus-square fa-2x col-1 offset-11" (click)="createNewPackage()"></i>
+    <div class="col-1 offset-11">
+      <i class="fa fa-plus-square fa-2x mx-1" (click)="createNewPackage()"></i>
+      <i class="fa fa-refresh fa-2x mx-1" (click)="getPackages()"></i>
+    </div>
     <!--    <ngx-scanner-qrcode #action="scanner" [src]="'https://domain.com/test.png'"></ngx-scanner-qrcode>-->
 
     <!-- data  -->
@@ -23,9 +26,9 @@
         <!--    &lt;!&ndash; data  &ndash;&gt;-->
         <!--        <p class="data">{{ (action.data | async | json) }}</p>-->
         <p class="data" *ngIf="!sendToPackage">کالای مد نظر انتخاب شده است</p>
-<!--        <button *ngIf="!sendToPackage" (click)="selectedPackageId = ''; sendToPackage = true" class="btn btn-danger">حذف-->
-<!--          کالا-->
-<!--        </button>-->
+        <!--        <button *ngIf="!sendToPackage" (click)="selectedPackageId = ''; sendToPackage = true" class="btn btn-danger">حذف-->
+        <!--          کالا-->
+        <!--        </button>-->
 
         <!--    &lt;!&ndash; loading &ndash;&gt;-->
         <p *ngIf="action.isLoading">⌛ Loading...</p>
@@ -34,10 +37,11 @@
         <button class="btn" [class.btn-info]="!action.isStart"
                 [class.btn-warning]="action.isStart"
                 [pTooltip]="action.isStart ? '' : 'توقف خوانش'"
-                [disabled]="action.isLoading || !action.isStart" (click)="handle(action, action.isStart ? 'stop' : 'start')">
+                [disabled]="action.isLoading || !isCameraFree"
+                (click)="handle(action, action.isStart ? 'stop' : 'start')">
           <i class="bi fw-bold" [class]="action.isStart ? 'bi-camera-video-off' : 'bi-camera-video'"></i>
         </button>
-&zwnj;
+        &zwnj;
         <!--    &lt;!&ndash; play/pause &ndash;&gt;-->
         <button class="btn" [class.btn-info]="!action.isStart"
                 [class.btn-warning]="action.isStart"
@@ -61,45 +65,57 @@
     <div *ngIf="!editMode; else editModes">
       <table class="table table-striped table-bordered table-hover">
         <thead class="table-responsive">
-        <tr>
+        <tr [class]="isCameraSearch ? 'bg-secondary' : ''">
+          <th><input type="radio" (click)="cameraSearch()" [value]="isCameraSearch" name="selectedPackage"></th>
           <th class="">رمزینه</th>
-          <!--      <th class="">رنگ</th>-->
           <th class="">وضعیت</th>
-          <th class="">عملیت</th>
+          <th class="">عملیات</th>
           <th class="">محتویات</th>
         </tr>
         </thead>
         <tbody class="table-responsive">
         <tr *ngFor="let entity of packages" [class]="selectedPackageId == entity.id ? 'selectedPackage' : ''">
-          <td class="">
-            <qrcode [qrdata]="entity.id"
-                    *ngIf="entity.id != undefined"
-                    [errorCorrectionLevel]="'M'"
-                    [colorLight]="'#00000000'"
-                    [width]="150"
-                    style=""
-                    [cssClass]="'bordered'"
-            ></qrcode>
+          <td>
+            <!--                   [value]="entity.isSelected"-->
+            <input type="radio"
+                   value="false"
+                   (click)="selectPackage(entity)"
+                   name="selectedPackage">
+            <!--          <td><input type="radio" (click)="selectForwarding(forwarding.id)" value="false" name="forwarding"></td>-->
+          </td>
+          <td class="p-2" [id]="'QrCode_' + entity.id">
+            <div class="border-2 rounded-2">
+              <qrcode [qrdata]="entity.id"
+                      *ngIf="entity.id != undefined"
+                      [errorCorrectionLevel]="'M'"
+                      [colorLight]="'#00000000'"
+                      [elementType]="'img'"
+                      [width]="110"
+                      style=""
+                      [cssClass]="'bordered'"
+              ></qrcode>
+<!--              salamsalamsalamsalamsalamsalam salamsalamsalamsalamsalamsalam salamsalamsalamsalamsalamsalam-->
+<!--              salamsalamsalamsalamsalamsalam salamsalamsalamsalamsalamsalam salamsalamsalamsalamsalamsalam-->
+            </div>
           </td>
           <!--      <td class=""> <input type="color" [value]="entity.color"></td>-->
           <td [class]="entity.status ? 'text-success' : 'text-danger'" class="fw-bold">
-            <i [class]="entity.status ? 'fa-box-open' : 'fa-box-archive'" class="fa" [pTooltip]="entity.status ? 'بسته بندی باز است' : 'بسته بندی بسته است'"></i>
+            <i [class]="entity.status ? 'fa-box-open' : 'fa-box-archive'" class="fa"
+               [pTooltip]="entity.status ? 'بسته بندی باز است' : 'بسته بندی بسته است'"></i>
           </td>
           <td>
-            <input type="radio"
-                   class="mx-1 fa-bo x"
-                   [value]="entity.isSelected"
-                   (click)="selectPackage(entity)"
-                   name="selectedPackage">
+            <button class="btn btn-success" [print]="['QrCode_' + entity.id, printConfig]" (click)="printQrCode()">چاپ
+            </button>
+            <!--            <button class="btn btn-success" ngxPrint [printSectionId]="'QrCode_' + entity.id">2چاپ</button>-->
             <!--        <i class="pi pi-pencil circle mx-1" *ngIf="entity.id != selectedPackageId"></i>-->
             <ng-container *ngIf="entity.id != undefined && entity.id == selectedPackageId">
               <i class="pi pi-check mx-1" [pTooltip]="'اتمام بسته بندی'" [tooltipPosition]="'top'"
                  (click)="finishPackaging(entity)"></i>
               <i class="pi pi-times mx-1" [pTooltip]="'لغو بسته بندی'" [tooltipPosition]="'top'"
                  (click)="cancelPackaging(entity)"></i>
-<!--              <input type="text" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"-->
-<!--                     #selectedWare>-->
-<!--              <i class="fa fa-plus" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"></i>-->
+              <!--              <input type="text" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"-->
+              <!--                     #selectedWare>-->
+              <!--              <i class="fa fa-plus" (keydown.enter)="addWarehouseInventoryToPackage(entity.id, selectedWare.value)"></i>-->
             </ng-container>
             <!--        <i class="fa fa-plus" [pTooltip]="'افزودن کالا به بسته بندی'"></i>-->
           </td>
@@ -107,7 +123,7 @@
             <!--          <td (click)="getPackageWarehouseInventory(entity.id)">-->
             <p-button icon="pi pi-search"
                       (click)="getPackageWarehouseInventory(entity.id); op.toggle($event)"></p-button>
-            <p-overlayPanel #op [showCloseIcon]="true" [style]="{width: '450px'}">
+            <p-overlayPanel id="op" #op [showCloseIcon]="true" [style]="{width: '50%'}">
               <ng-template pTemplate>
                 <p-table [value]="packageWarehouseInventory" selectionMode="single" [(selection)]="selectedProduct"
                          (onRowSelect)="onRowSelect($event)" [paginator]="true" [rows]="5" responsiveLayout="scroll">
@@ -139,6 +155,7 @@
                     </div>
                   </ng-template>
                 </p-table>
+                <!--              <div class="bg-light rounded-4 text-dark text-center" [print]="['opp']">print</div>-->
               </ng-template>
             </p-overlayPanel>
           </td>
@@ -153,3 +170,35 @@
     </ng-template>
   </div>
 </div>
+<!--<table id="demo" class="table table-bordered">
+  <tr>
+    <th>No</th>
+    <th>Company</th>
+    <th>Contact</th>
+    <th>Country</th>
+  </tr>
+  <tr class="print-none" style="background: greenyellow">&lt;!&ndash; No print &ndash;&gt;
+    <td>01</td>
+    <td>Alfreds Futterkiste</td>
+    <td>Maria Anders</td>
+    <td>Germany</td>
+  </tr>
+  <tr>
+    <td>02</td>
+    <td>Centro comercial Moctezuma</td>
+    <td>Francisco Chang</td>
+    <td>Mexico</td>
+  </tr>
+  <tr>
+    <td>03</td>
+    <td>AIS Playground</td>
+    <td>Nakhon Pathom</td>
+    <td>Thailand</td>
+  </tr>
+  <tr class="print-none" style="background: greenyellow"> &lt;!&ndash; No print &ndash;&gt;
+    <td>04</td>
+    <td>FPT Software</td>
+    <td>Cau Giay</td>
+    <td>Vietnamese</td>
+  </tr>
+</table>-->

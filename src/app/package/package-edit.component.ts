@@ -36,7 +36,6 @@ export class PackageEditComponent implements OnInit {
   private save() {
     this.package.status = true;
     this.packageService.savePackage(this.package).subscribe(newPackage => {
-      console.log(newPackage);
     });
   }
 }

@@ -53,7 +53,6 @@ export class WarehouseInventoryEditComponent implements OnInit {
         this.warehouseInventory.expirationDate = this.expirationDate.value;
         this.uploadFile();
         this.save();
-        console.log(this.warehouseInventory);
         break;
       case 'reload':
         break;

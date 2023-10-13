@@ -48,8 +48,9 @@ import {WarehouseSearchComponent} from "./warehouse/warehouse-search.component";
 import {OverlayPanelModule} from "primeng/overlaypanel";
 import {TableModule} from "primeng/table";
 import {NgPersianDatepickerModule} from "ng-persian-datepicker";
-import {WarehouseInventoryShowImageComponent} from "./warehouse-inventory/warehouse-inventory-show-image.component";
 import {GalleriaModule} from "primeng/galleria";
+import {NgxPrintElementModule} from "ngx-print-element";
+import {NgxPrintModule} from "ngx-print";
 
 
 @NgModule({
@@ -85,7 +86,6 @@ import {GalleriaModule} from "primeng/galleria";
     JalaliPipe,
     WarehouseSearchComponent,
     ColorComponent,
-    WarehouseInventoryShowImageComponent,
   ],
   imports: [
     BrowserModule,
@@ -107,6 +107,8 @@ import {GalleriaModule} from "primeng/galleria";
     NgPersianDatepickerModule,
     ReactiveFormsModule,
     GalleriaModule,
+    NgxPrintElementModule,
+    NgxPrintModule,
   ],
   providers: [
     DecimalPipe,

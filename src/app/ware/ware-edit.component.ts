@@ -47,12 +47,10 @@ export class WareEditComponent implements OnInit {
   }
 
   save() {
-    console.log(this.selectedFile);
     // @ts-ignore
     this.ware.typeTitle = this.selectedFile.label;
     // @ts-ignore
     this.ware.typeId = this.selectedFile.id;
-    console.log(this.ware);
     this.wareService.saveWare(this.ware).subscribe(ware => {
       success: {
         this.switchToGrid();

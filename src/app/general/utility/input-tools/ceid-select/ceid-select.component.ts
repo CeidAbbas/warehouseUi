@@ -24,7 +24,6 @@ export class CeidSelectComponent<M> implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.selected);
     if (this.isBaseInformation) {
       this.ceidSelectService.getBaseInformationData(this.rest).subscribe(res => {
         this.models = res.filter((model: { parent: string; }) => {

@@ -43,7 +43,6 @@ export class WarehouseResponsibleEditComponent implements OnInit {
       });
     this.personService.getAllPerson().subscribe(persons => {
       this.persons = persons;
-      console.log(this.persons);
     });
     this.warehouseService.getAllWarehouses().subscribe(warehouses => {
       this.warehouses = warehouses;
@@ -52,7 +51,6 @@ export class WarehouseResponsibleEditComponent implements OnInit {
   }
 
   save() {
-    console.log(this.warehouseResponsible);
     this.warehouseResponsibleService.saveWarehouseResponsible(this.warehouseResponsible).subscribe(data => {
       success: {
         this.switchToGrid();
